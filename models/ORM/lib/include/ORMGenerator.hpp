@@ -1,16 +1,13 @@
 #pragma once
 #include <iostream>
+#include <string>
 
-//для этого класса тестов нет, т.к. он довольно абстрактный и его сложно проверить без совместной проверки работы в бэкендом
-class ORMGenerator //класс, который генерирует фильтры, ModeManager'ы модели для бэкенда
+class ORMGenerator
 {
 public:
-    void Generate();
-
-private:
-    const std::string JSON_model_file;
+    const std::string model_file;
     void GenerateFilters();
     void GenerateModelManager();
     void GenerateModels();
-    // void FillModels(); to do (сделаем, если успеем, к концу)
+    void FillModels(); //ToDO in late
 };
