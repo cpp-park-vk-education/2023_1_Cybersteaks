@@ -1,2 +1,0 @@
-UPDATE table
-SET object;
