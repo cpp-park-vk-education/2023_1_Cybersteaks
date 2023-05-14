@@ -2,42 +2,7 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
-
-struct Filter {
-    std::string name;
-    std::string type;
-    std::string model_field;
-    Filter(const std::string& name, const std::string& type, const std::string& model_field) {
-        this->name = name;
-        this->type = type;
-        this->model_field = model_field;
-    }
-};
-
-struct FilterSet {
-    std::vector<Filter> filters;
-    std::string model;
-    FilterSet(const std::string& model, std::vector<Filter> filters) {
-        this->filters = filters;
-        this->model = model;
-    }
-};
-
-std::vector<FilterSet> filtersets = {
-    FilterSet("Musicians", {
-        Filter("Группа", "checkbox", "type"),
-        Filter("Количество участников", "integer", "member_count"),
-        Filter("Жанр музыки", "text", "genre")
-    }),
-    FilterSet("Artists", {
-        Filter("Пейзажисты", "checkbox", "type"),
-        Filter("Количество участников", "integer", "member_count"),
-        Filter("Жанр картин", "text", "genre")
-    }),
-    FilterSet("Programmers", {
-        Filter("Gamedev", "checkbox", "type"),
-    })
-};
+#include "../models/models.hpp"
 
 class FilterConverter {
 public:

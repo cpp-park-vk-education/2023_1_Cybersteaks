@@ -1,11 +1,4 @@
 {
-    "types" : [
-        "integer",
-        "date",
-        "string",
-        "choices",
-        "foreign_key"
-    ],
     "models" : {
         "Users" : {
             "ID" : "integer",
@@ -48,53 +41,6 @@
             "ID" : "integer",
             "href" : "string",
             "post_id" : "foreign_key"
-        },
-        "fields" : {
-            "Default_field" : {
-                "name" : { "type" : "string" },
-                "group_members" : { "type" : "integer" }
-            },
-            "Musicians" : {
-                "type" : {
-                    "type" : "choices",
-                    "choices" : [
-                        "group",
-                        "label",
-                        "etc"
-                    ]
-                },
-                "genre" : {
-                    "type" : "choices",
-                    "choices" : [
-                        "pop",
-                        "pank",
-                        "rock",
-                        "hip-hop",
-                        "classic"
-                    ]
-                }
-            },
-            "Artists" : {
-                "type" : {
-                    "type" : "choices",
-                    "choices" : [
-                        "peizashist",
-                        "modern",
-                        "postmodern"
-                    ]
-                }
-            },
-            "Programmers" : {
-                "lang" : {
-                    "type" : "choices",
-                    "choices" : [
-                        "cpp",
-                        "c#",
-                        "ruby",
-                        "php"
-                    ]
-                }
-            }
         }
     }
 }
