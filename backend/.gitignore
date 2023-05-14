@@ -2,12 +2,15 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,visualstudio,visualstudiocode,cmake,c,c++
 
 hints.txt
-go.sh
-quiery.sh
+#go.sh
+#quiery.sh
+script.sh
 build
 ### C ###
 # Prerequisites
 *.d
+
+.vscode
 
 # Object files
 *.o
