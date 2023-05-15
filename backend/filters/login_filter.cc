@@ -12,9 +12,9 @@ void login_filter::doFilter(const HttpRequestPtr &req, FilterCallback &&fcb, Fil
     Json::Value json;
     auto request_body = req->getJsonObject();
 
-    if (!(request_body->isMember("login")) || !(request_body->isMember("email"))) {
+    if (!(request_body->isMember("login")) || !(request_body->isMember("password"))) {
         json["status"] = "error";
-        json["message"] = "missing login/email/password";
+        json["message"] = "missing login/password";
 
         auto response = HttpResponse::newHttpJsonResponse(json);
         response->setStatusCode(HttpStatusCode::k400BadRequest);

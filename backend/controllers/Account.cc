@@ -44,10 +44,12 @@ void Account::login(const HttpRequestPtr &req, std::function<void(const HttpResp
     // Authentication algorithm, read database, verify, identify, etc...
     //...
 
-    std::string login = req->getParameter("login");
-    std::string password = req->getParameter("password");
+    auto request_body = req->getJsonObject();
 
-    LOG_DEBUG << "User " << login << " trying to log in";
+    Json::Value login = (*request_body)["login"];
+    Json::Value password = (*request_body)["password"];
+
+    LOG_DEBUG << "User " << login.asString() << " trying to log in";
     Json::Value json;
 
     // GO TO DB AND CHECK LOGIN&PASSW
@@ -57,11 +59,11 @@ void Account::login(const HttpRequestPtr &req, std::function<void(const HttpResp
     json["status"] = "ok";
     json["message"] = "got verification";
     json["token"] =
-        drogon::utils::base64Encode(reinterpret_cast<const unsigned char *>(login.c_str()), login.size());
+        drogon::utils::base64Encode(reinterpret_cast<const unsigned char *>(login.asString().c_str()), login.asString().size());
     auto resp = HttpResponse::newHttpJsonResponse(json);
     resp->setStatusCode(HttpStatusCode::k200OK);
     resp->setContentTypeCode(ContentType::CT_APPLICATION_JSON);
-    LOG_DEBUG << "User " << login << " logged in successfully";
+    LOG_DEBUG << "User " << login.asString() << " logged in successfully";
     callback(resp);
 }
 
@@ -77,7 +79,7 @@ void Account::logout(const HttpRequestPtr &req, std::function<void(const HttpRes
 
     Json::Value json;
     json["status"] = "ok";
-    json["message"] = "log out: success";
+    json["message"] = "log out: successful for " + login;
     auto resp = HttpResponse::newHttpJsonResponse(json);
     resp->setStatusCode(HttpStatusCode::k200OK);
     resp->setContentTypeCode(ContentType::CT_APPLICATION_JSON);
@@ -95,24 +97,32 @@ void Account::settings(const HttpRequestPtr &req, std::function<void(const HttpR
     auto request_body = req->getJsonObject();
     std::string login = drogon::utils::base64Decode(req->getHeader("Authorization"));
     // now we can define what user settnigs we whould get from db
-    std::string first_name, last_name, creative_fields, creation_date, birthday, gender;
+    std::string first_name, last_name, clusters, creation_date, birthday, gender;
 
     if (req->getMethod() == HttpMethod::Get) {
         LOG_DEBUG << "User " << login << " is getting his account settings";
 
         // first_name = ... , etc
 
-        // json["first_name"] = first_name
         json["status"] = "ok";
+        json["login"] = login;
+        json["first_name"] = first_name;
+        json["last_name"] = last_name;
+        json["clusters"] = clusters;
+        json["birthday"] = birthday;
+        json["gender"] = gender;
+        json["creation_date"] = creation_date;
+    
         auto resp = HttpResponse::newHttpJsonResponse(json);
         resp->setStatusCode(HttpStatusCode::k200OK);
         callback(resp);
     } else if (req->getMethod() == HttpMethod::Post) {
         LOG_DEBUG << "User " << login << " is trying to define account settings";
 
-        //...
+        //std::string new_first_name = (*request_body)["first_name"].asString();
         // check if cluster is in db, birth date format
 
+        json["message"] = "successfully defined account settings for " + login;
         json["status"] = "ok";
         auto resp = HttpResponse::newHttpJsonResponse(json);
         resp->setStatusCode(HttpStatusCode::k200OK);
@@ -121,7 +131,7 @@ void Account::settings(const HttpRequestPtr &req, std::function<void(const HttpR
         LOG_DEBUG << "User " << login << " is trying to edit account settings";
 
         if (request_body->isMember("login")) {
-            std::string new_login = req->getParameter("login");
+            std::string new_login = (*request_body)["login"].asString();
             // go to db and change login
             //  ...
         }
@@ -286,6 +296,3 @@ void Account::resume(const HttpRequestPtr &req, std::function<void(const HttpRes
     auto resp = HttpResponse::newHttpJsonResponse(json);
     callback(resp);
 }
-
-// acc/settings
-// acc/resume/group

@@ -24,7 +24,7 @@ class Account : public drogon::HttpController<Account> {
     METHOD_LIST_BEGIN
     METHOD_ADD(Account::signup, "/signup", Post, "empty_body_filter", "signup_filter");
     METHOD_ADD(Account::login, "/login", Post, "empty_body_filter", "login_filter");  // url: /account/login
-    METHOD_ADD(Account::logout, "/logout", Delete, "empty_body_filter", "auth_filter");
+    METHOD_ADD(Account::logout, "/logout", Delete, "auth_filter");
     METHOD_ADD(Account::settings, "/settings", Post, Get, Patch, "empty_body_filter", "auth_filter");
     METHOD_ADD(Account::posts, "/posts", Post, Get, Delete, "empty_body_filter", "auth_filter");
     METHOD_ADD(Account::groups, "/groups", Get, Post, Delete, "empty_body_filter", 
