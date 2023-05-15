@@ -1,14 +1,17 @@
 #pragma once
 
-#include <drogon/HttpSimpleController.h>
+#include <drogon/HttpController.h>
 
 using namespace drogon;
 
-class Clusters : public drogon::HttpSimpleController<Clusters>
+class Clusters : public drogon::HttpController<Clusters>
 {
-   public:
+  public:
     void main(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
-    PATH_LIST_BEGIN
-    METHOD_ADD(Clusters::main, "/", Get);
-    PATH_LIST_END
+    void groups(const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback);
+
+    METHOD_LIST_BEGIN
+    METHOD_ADD(Clusters::main, "", Get);
+    METHOD_ADD(Clusters::groups, "/groups", Get);
+    METHOD_LIST_END
 };
