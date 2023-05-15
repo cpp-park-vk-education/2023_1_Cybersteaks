@@ -13,7 +13,7 @@ void auth_filter::doFilter(const HttpRequestPtr &req, FilterCallback &&fcb, Filt
 
     std::string decoded = utils::base64Decode(token);
 
-    if (token != "")  // && decoded is in password table in db
+    if (token != "")  // && decoded is in table table in db
     {
         fccb();
         return;
