@@ -41,5 +41,6 @@ curl -X DELETE localhost:1026/account/exy/resume/projects?token=123
 
 
 
+# curl -X POST [URL] -H "Content-Type: application/json" -d '{"field1":"value1","field2":["value2","value3"]}'
 
-
+# curl -X POST localhost:1026/account/posts -H "Content-Type: application/json" -H "Authorization: aGVsbG8=" -d '{"posts":["value2","value3"]}'

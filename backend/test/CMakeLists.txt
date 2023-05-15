@@ -5,6 +5,7 @@ project(increa_proj_test CXX)
                                                          #
 add_executable(${PROJECT_NAME} test_main.cc)
 
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
 
 include(ParseAndAddDrogonTests)

@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME} main.cc)
 
 find_package(Drogon CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 
 
 if (CMAKE_CXX_STANDARD LESS 17)

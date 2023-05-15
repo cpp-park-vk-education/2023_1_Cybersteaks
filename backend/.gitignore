@@ -4,13 +4,10 @@
 hints.txt
 #go.sh
 #quiery.sh
-script.sh
 build
 ### C ###
 # Prerequisites
 *.d
-
-.vscode
 
 # Object files
 *.o
