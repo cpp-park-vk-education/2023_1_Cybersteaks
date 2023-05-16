@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.0.0)
+project(INcrea VERSION 0.1.0)
+SET(CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+FIND_PACKAGE(Wt REQUIRED)
+INCLUDE_DIRECTORIES(/usr/local/include/Wt)
+
+add_subdirectory(src/app)
+add_subdirectory(src/model)
+add_subdirectory(src/view)
+add_subdirectory(src/store)
+
+add_executable(INcrea src/main.cpp)
+
+target_link_libraries(INcrea app)
+target_link_libraries(INcrea store)
+target_link_libraries(INcrea model)
+target_link_libraries(INcrea feedView)
+target_link_libraries(INcrea /usr/local/lib/libwt.so /usr/local/lib/libwthttp.so)
