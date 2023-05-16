@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.5)
 project(increa_proj CXX)
 
 include(CheckIncludeFileCXX)
@@ -19,30 +19,16 @@ endif ()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
 add_executable(${PROJECT_NAME} main.cc)
 
-# option(BUILD_TESTS "build tests")
-# if(BUILD_TESTS)
-#   enable_testing()
-#   find_package(GTest REQUIRED)
-# endif()
 
-# add_subdirectory(gtest)
-
-# ##############################################################################
-# If you include the drogon source code locally in your project, use this method
-# to add drogon 
-# add_subdirectory(drogon) 
-# target_link_libraries(${PROJECT_NAME} PRIVATE drogon)
-#
-# and comment out the following lines
 find_package(Drogon CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 
-# ##############################################################################
 
 if (CMAKE_CXX_STANDARD LESS 17)
-    # With C++14, use boost to support any, string_view and filesystem
     message(STATUS "use c++14")
     find_package(Boost 1.61.0 REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
@@ -56,6 +42,7 @@ aux_source_directory(controllers CTL_SRC)
 aux_source_directory(filters FILTER_SRC)
 aux_source_directory(plugins PLUGIN_SRC)
 aux_source_directory(models MODEL_SRC)
+
 
 drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
                     ${CMAKE_CURRENT_BINARY_DIR})
@@ -83,4 +70,9 @@ target_sources(${PROJECT_NAME}
 
 # ##############################################################################
 
-add_subdirectory(test)
+option(BUILD_TESTS "opt for test building")
+
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()
