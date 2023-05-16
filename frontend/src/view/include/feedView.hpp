@@ -28,6 +28,7 @@ public:
     Wt::Signal<std::string>& internal_path() { return internal_path_; };
 private:
     Wt::WContainerWidget *body_;
+    Wt::WContainerWidget *header_;
     Wt::WContainerWidget *group_box_;
     Wt::WImage *user_icon_;
     Wt::WContainerWidget *search_box_;
@@ -40,6 +41,7 @@ private:
     void RenderGroup(Group group);
     void RenderGroups();
     void LoadingInitialSize();
+    void AddCssStyles();
     void HandleHttpResponse(std::error_code err, const Wt::Http::Message& response);
 };
 
