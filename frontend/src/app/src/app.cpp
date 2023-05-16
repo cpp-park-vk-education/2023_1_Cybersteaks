@@ -4,7 +4,6 @@
 #include <Wt/WLink.h>
 
 void INcreaApplication::CreateStatic() {
-    head_->addWidget(std::make_unique<Wt::WText>("Главная"));
 }
 
 void INcreaApplication::Clear() {
@@ -17,7 +16,6 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
     Wt::WApplication *app = Wt::WApplication::instance();
     Clear();
     CreateStatic();
-    body_->addWidget(std::make_unique<Wt::WText>(app->internalPath()));
     std::cout << "==============CURRENT URL PATH: " << path << std::endl;
     if (path == "/") {
         feedView* fview = body_->addWidget(std::make_unique<feedView>());
@@ -42,6 +40,7 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
 INcreaApplication::INcreaApplication(const Wt::WEnvironment& env)
     : WApplication(env)
 {
+    useStyleSheet("src/css/feed_view.css");
     head_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     body_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     Clear();
