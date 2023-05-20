@@ -50,13 +50,14 @@ void feedView::HandleHttpResponse(std::error_code err, const Wt::Http::Message& 
         Wt::Json::Array groups;
         groups_.clear();
         Wt::Json::parse(response.body(), json_body);
-        groups = json_body["groups"];
+        groups = json_body.get("groups");
         for (int i = 0; i < groups.size(); ++i) {
-            Group group; 
-            group["ID"] = groups[i]["ID"];
-            group["name"] = groups[i]["name"];
-            group["descriptions"] = groups[i]["descriptions"];
-            group["type"] = groups[i]["type"];
+            Group group;
+            Wt::Json::Object group_obj = groups[i];  
+            group["ID"] = int(group_obj.get("ID"));
+            group["name"] = std::string(group_obj.get("name"));
+            group["description"] = std::string(group_obj.get("description"));
+            group["type"] = std::string(group_obj.get("type"));
             groups_.push_back(group);
         }
         RenderGroups();
