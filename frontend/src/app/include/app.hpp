@@ -14,7 +14,9 @@
 #include <Wt/WImage.h>
 
 #include "feedView.hpp"
+#include "loginView.hpp"
 #include "store.hpp"
+#include "model.hpp"
 
 class INcreaApplication : public Wt::WApplication
 {
@@ -24,6 +26,8 @@ public:
 private:
     Wt::WContainerWidget *head_;
     Wt::WContainerWidget *body_;
+    Token token;
+    User user;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);

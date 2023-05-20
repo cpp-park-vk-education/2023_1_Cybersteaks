@@ -69,7 +69,8 @@ protected:
 
 class Model {
 public:
-    virtual std::string JSONSerializer() = 0;
+    std::string JSONSerializer();
+    void JsonParse(const Wt::Json::Object obj);
     ModelJsonValue& operator [] (const std::string& v_name);
 protected:
     std::vector<ModelJsonValue> values;
@@ -78,5 +79,31 @@ protected:
 class Group : public Model {
 public:
     Group();
-    std::string JSONSerializer();
+};
+
+class User : public Model {
+public:
+    User();
+};
+
+class Token {
+public:
+    Token() {
+        access_token = "";
+        token_name = "";
+    };
+    Token(const std::string& t_name) {
+        access_token = "";
+        token_name = t_name;
+    };
+    Token(const std::string& a_token, const std::string& t_name) {
+        access_token = a_token;
+        token_name = t_name;
+    };
+    std::string GetToken() { return access_token; };
+    void SetToken(const std::string& new_token) { access_token = new_token; };
+    std::string AuthString() { return token_name + " " + access_token; };
+private:
+    std::string access_token;
+    std::string token_name;
 };
