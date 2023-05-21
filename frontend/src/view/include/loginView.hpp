@@ -23,13 +23,16 @@ class loginView : public Wt::WContainerWidget {
 public:
     loginView();
     void GoToTheUserPage();
+    void GoToRegistration();
     Wt::Signal<std::string, std::string, std::string>& internal_path() { return internal_path_; };
+    Wt::Signal<std::string>& reg_path() { return reg_path_; };
 private:
     std::string token;
     std::string username;
     std::string error;
     Wt::Http::Client *client_;
     Wt::Signal<std::string, std::string, std::string> internal_path_;
+    Wt::Signal<std::string> reg_path_;
     void DoGetRequest(const std::string& url);
     void HandleHttpResponse(std::error_code err, const Wt::Http::Message& response);
 
@@ -38,5 +41,6 @@ private:
     Wt::WLineEdit* username_;
     Wt::WLineEdit* password_;
     Wt::WContainerWidget* button_;
+    Wt::WContainerWidget* reg_link_;
     void AddCssStyles();
 };

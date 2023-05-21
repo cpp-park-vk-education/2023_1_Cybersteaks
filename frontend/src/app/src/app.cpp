@@ -42,6 +42,10 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
                 HandlePathChange(next_url);
             }
         });
+        lView->reg_path().connect(this, [=] (const std::string& url) {
+            app->setInternalPath(url);
+            HandlePathChange(url);
+        });
     }
     else if (path == "/registration") {
         body_->addWidget(std::make_unique<Wt::WText>("registraton"));

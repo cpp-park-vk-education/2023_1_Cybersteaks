@@ -4,10 +4,15 @@ void loginView::AddCssStyles() {
     body_->addStyleClass("login_body");
     form_->addStyleClass("login_form");
     button_->addStyleClass("login_form_button");
+    reg_link_->addStyleClass("login_form_link");
 }
 
 void loginView::GoToTheUserPage() {
     internal_path_.emit(token, username, error);
+}
+
+void loginView::GoToRegistration() {
+    reg_path_.emit("/registration");
 }
 
 void loginView::DoGetRequest(const std::string& url) {
@@ -61,6 +66,11 @@ loginView::loginView() {
     button_->clicked().connect([=] (const Wt::WMouseEvent& e) {
         DoGetRequest(""); //it's url for creating token
         GoToTheUserPage();
+    });
+    reg_link_ = form_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    Wt::WText* link = reg_link_->addWidget(std::make_unique<Wt::WText>("Регистрация"));
+    link->clicked().connect([=] (const Wt::WMouseEvent& e) {
+        GoToRegistration();
     });
     token = "";
     error = "no data in form";
