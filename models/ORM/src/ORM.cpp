@@ -6,7 +6,7 @@
 #include <iostream>
 #include <exception>
 #include <boost/algorithm/string.hpp>
-#include <mysql/include/mysqlx/xdevapi.h>
+#include <mysqlx/xdevapi.h>
 
 class Error : public std::exception
 {

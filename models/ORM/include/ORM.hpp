@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <mysql/include/mysqlx/xdevapi.h>
+#include <mysqlx/xdevapi.h>
 
 const std::string pathToConfigFile = "../SQLConfig.txt";
 const std::string dataBaseName = "MockDB";
