@@ -11,21 +11,21 @@ public:
     }
 
     std::string GetFilterExpression(User filter_object) override {
-        std::string expression = "WHERE ";
+        std::string expression = "";
         if(filter_object.ID != -1)
-            expression += "ID = " + std::to_string(filter_object.ID);
+            expression += "ID = " + std::to_string(filter_object.ID) + " AND ";
         if(filter_object.login != "")
-            expression += "login = " + filter_object.login;
+            expression += "login = " + filter_object.login + " AND ";
         if(filter_object.password != "")
-            expression += "password = " + filter_object.password;
+            expression += "password = " + filter_object.password + " AND ";
         if(filter_object.first_name != "")
-            expression += "first_name = " + filter_object.first_name;
+            expression += "first_name = " + filter_object.first_name + " AND ";
         if(filter_object.second_name != "")
-            expression += "second_name = " + filter_object.second_name;
+            expression += "second_name = " + filter_object.second_name + " AND ";
         if(filter_object.photo != "")
-            expression += "photo = " + filter_object.photo;
+            expression += "photo = " + filter_object.photo + " AND ";
         if(filter_object.subscribers != -1)
-            expression += "subscribers = " + std::to_string(filter_object.subscribers);
+            expression += "subscribers = " + std::to_string(filter_object.subscribers) + " AND ";
         if(filter_object.subscriptions != -1)
             expression += "subcribtions = " + std::to_string(filter_object.subscriptions);
         return expression;
