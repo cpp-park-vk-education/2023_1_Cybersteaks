@@ -23,7 +23,7 @@ public:
 
 private:
     static std::unique_ptr<mysqlx::Session> ConnectionDB();
-    ;
+    
 };
 
 class ORMGenerator
