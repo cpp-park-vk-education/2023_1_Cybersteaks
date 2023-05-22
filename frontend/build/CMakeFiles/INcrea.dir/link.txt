@@ -1,1 +1,0 @@
-/usr/bin/c++  -std=c++17 -rdynamic CMakeFiles/INcrea.dir/src/main.cpp.o -o INcrea  -Wl,-rpath,/usr/local/lib src/app/libapp.a src/store/libstore.a src/model/libmodel.a src/view/libfeedView.a /usr/local/lib/libwt.so /usr/local/lib/libwthttp.so src/model/libmodel.a 
