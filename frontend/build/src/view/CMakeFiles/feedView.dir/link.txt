@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfeedView.a CMakeFiles/feedView.dir/src/feedView.cpp.o
+/usr/bin/ranlib libfeedView.a
