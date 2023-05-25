@@ -6,7 +6,7 @@ void Clusters::main(const HttpRequestPtr &req, std::function<void(const HttpResp
     LOG_DEBUG << "someone is trying to get clusters list";
 
     Json::Value json;
-    std::vector<std::string> clusters; // from db
+    std::vector<std::string> clusters = {"Musicians", "Artists", "Programmers"}; // from db
 
     json["clusters"] = Json::arrayValue;
 
@@ -29,7 +29,7 @@ void Clusters::groups(const HttpRequestPtr &req, std::function<void(const HttpRe
     LOG_DEBUG << "someone is trying to get clusters groups list";
 
     Json::Value json;
-    std::vector<std::string> groups; // from db
+    std::vector<std::string> groups = {"NoPainNoGain", "MusiciansClusterBastards", "HardRockPayesOff"};
 
     json["cluster_groups"] = Json::arrayValue;
 

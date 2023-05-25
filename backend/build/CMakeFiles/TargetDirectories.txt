@@ -1,3 +1,0 @@
-/home/ant/2023_1_Cybersteaks/backend/build/CMakeFiles/increa_proj.dir
-/home/ant/2023_1_Cybersteaks/backend/build/CMakeFiles/edit_cache.dir
-/home/ant/2023_1_Cybersteaks/backend/build/CMakeFiles/rebuild_cache.dir

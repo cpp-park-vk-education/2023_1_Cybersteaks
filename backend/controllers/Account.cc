@@ -19,6 +19,13 @@ void Account::signup(const HttpRequestPtr &req, std::function<void(const HttpRes
     bool is_logged_in = 0;
 
     std::unordered_map<std::string, std::string> db_field;
+
+    // sample 
+    login = "baobab123";
+    password = "6952b196001c557e9066222e25b43024c1a04ba96c955f39891d8893e5518a76";
+    email = "antonybill@gmail.com";
+    //
+
     db_field["login"] = login;
     db_field["password"] = password;
     db_field["email"] = email;
@@ -104,6 +111,14 @@ void Account::settings(const HttpRequestPtr &req, std::function<void(const HttpR
 
         // first_name = ... , etc
 
+        login = "baobab123";
+        first_name = "Antony";
+        last_name = "Bill";
+        clusters = "Musicians, Programmers";
+        creation_date = "20.05.2020";
+        birthday = "21.03.2002";
+        gender = "male";
+
         json["status"] = "ok";
         json["login"] = login;
         json["first_name"] = first_name;
@@ -155,7 +170,10 @@ void Account::posts(const HttpRequestPtr &req, std::function<void(const HttpResp
 
         LOG_DEBUG << "User " << login << "is trying to get his posts";
 
-        std::vector<std::string> posts; // from db
+        std::vector<std::string> posts = {"I'm a session guitarist, looking for a band to play together, rehearse. I like to play electric guitar, especially solo! I play mostly hard rock, blues rock.",
+        "Hi! I'm looking for a talented songwriter, I'm a good performer, but writing is much worse. Write, I'm waiting for feedback!",
+            "We are an aspiring rock band from St. Petersburg, we are looking for a handy technician, namely a sound engineer, it will be great if you are also a sound engineer, write, we are waiting for you!",
+            "I'm looking for a trumpeter for joint jams and rehearsals", "I love country and blues, I play the guitar and harmonica, a talented keyboard player!"}; // from db
         json["posts"] = Json::arrayValue;
 
         for (const std::string& post : posts) {
@@ -225,10 +243,11 @@ void Account::groups(const HttpRequestPtr &req, std::function<void(const HttpRes
 
         LOG_DEBUG << "User " << login << "is trying to get his groups";
 
-        std::vector<std::string> groups; // from db
+        std::vector<std::string> groups = {"Progressive-metal fans", "ProfessionalDogLovers", "SixPistol", "BabaJoe", "FinalRound"};
         json["groups"] = Json::arrayValue;
 
         for (const std::string& group : groups) {
+            std::cout << group;
             json["groups"].append(group);
         }
 
