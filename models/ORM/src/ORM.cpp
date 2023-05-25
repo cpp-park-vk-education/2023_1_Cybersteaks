@@ -26,7 +26,7 @@ private:
     std::string message_;
 };
 
-std::vector<mysqlx::Row> ORM::Select(std::string &table)
+std::vector<mysqlx::Row> ORM::Select(const std::string &table)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -38,7 +38,7 @@ std::vector<mysqlx::Row> ORM::Select(std::string &table)
     return result.fetchAll();
 }
 
-std::vector<mysqlx::Row> ORM::Filter(std::string &table, std::string &parameter)
+std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string &parameter)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -50,7 +50,7 @@ std::vector<mysqlx::Row> ORM::Filter(std::string &table, std::string &parameter)
     return result.fetchAll();
 }
 
-std::vector<mysqlx::Row> ORM::Find(std::string &table, std::string &object_id)
+std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -63,7 +63,7 @@ std::vector<mysqlx::Row> ORM::Find(std::string &table, std::string &object_id)
     return result.fetchAll();
 }
 
-bool ORM::Delete(std::string &table, std::string &object_id)
+bool ORM::Delete(const std::string &table, const std::string &object_id)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -86,7 +86,7 @@ bool ORM::Delete(std::string &table, std::string &object_id)
     return false;
 }
 
-bool ORM::Insert(std::string &table, std::map<std::string, std::string> &object)
+bool ORM::Insert(const std::string &table, std::map<std::string, std::string> &object)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -119,7 +119,7 @@ bool ORM::Insert(std::string &table, std::map<std::string, std::string> &object)
     return false;
 }
 
-bool ORM::Update(std::string &table, std::map<std::string, std::string> &object)
+bool ORM::Update(const std::string &table, std::map<std::string, std::string> &object)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -128,7 +128,7 @@ bool ORM::Update(std::string &table, std::map<std::string, std::string> &object)
     mysqlx::Schema db = (*connection).getSchema(dataBaseName);
     mysqlx::Table dbTable = db.getTable(table);
 
-    std::string ID = object["ID"];
+    const std::string ID = object["ID"];
 
     std::vector<std::string> fields;
     std::vector<std::string> values;
@@ -162,7 +162,7 @@ bool ORM::Update(std::string &table, std::map<std::string, std::string> &object)
     return false;
 }
 
-bool ORM::CreateTable(std::string &table, std::vector<std::string> &columns_names_and_types)
+bool ORM::CreateTable(const std::string &table, std::map<std::string, std::string> &columns_names_and_types)
 {
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
@@ -172,9 +172,10 @@ bool ORM::CreateTable(std::string &table, std::vector<std::string> &columns_name
     (*connection).startTransaction();
     try
     {
-        std::string SQLRequest = "CREATE TABLE " + table;
-        for (std::string column : columns_names_and_types)
-            SQLRequest += " " + column;
+        std::string SQLRequest = "CREATE TABLE " + table + "(\n";
+        for (auto &column : columns_names_and_types)
+            SQLRequest += column.first + " " + column.second + "\n";
+        SQLRequest += ");";
         (*connection).sql(SQLRequest);
         (*connection).commit();
         return true;
@@ -187,7 +188,7 @@ bool ORM::CreateTable(std::string &table, std::vector<std::string> &columns_name
     return false;
 }
 
-bool ORM::DeleteTable(std::string &table)
+bool ORM::DeleteTable(const std::string &table)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -208,7 +209,7 @@ bool ORM::DeleteTable(std::string &table)
     return false;
 }
 
-bool ORM::DropDatabase(std::string &database)
+bool ORM::DropDatabase(const std::string &database)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)

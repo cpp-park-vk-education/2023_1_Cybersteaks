@@ -1,0 +1,27 @@
+{
+    "models": {
+        "Subscriptions": {
+            "ID": "integer",
+            "type": "string",
+            "users_id": "foreign_key",
+            "group_id": "foreign_key"
+        },
+        "Post": {
+            "ID": "integer",
+            "content": "string",
+            "creation_date": "date",
+            "likes": "integer",
+            "group_id": "foreign_key"
+        },
+        "Likes": {
+            "ID": "integer",
+            "user_id": "foreign_key",
+            "post_id": "foreign_key"
+        },
+        "Post_content": {
+            "ID": "integer",
+            "href": "string",
+            "post_id": "foreign_key"
+        }
+    }
+}
