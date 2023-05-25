@@ -33,9 +33,11 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
     }
     else if (path == "/login") {
         loginView* lView = body_->addWidget(std::make_unique<loginView>());
-        lView->internal_path().connect(this, [=] (const std::string& new_token, const std::string& username, const std::string& error) {
+        lView->internal_path().connect(this, [=] (const std::string& new_token, const std::string& new_username, const std::string& error) {
             if (error == "") {
                 std::string next_url = "/userpage";
+                user = new_username;
+                token.SetToken(new_token);
                 if (new_token == "")
                     next_url = "/login";
                 app->setInternalPath(next_url);
@@ -57,6 +59,8 @@ INcreaApplication::INcreaApplication(const Wt::WEnvironment& env)
 {
     useStyleSheet("src/css/feed_view.css");
     useStyleSheet("src/css/login_view.css");
+    user = "";
+    token.SetToken("");
     head_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     body_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     Clear();

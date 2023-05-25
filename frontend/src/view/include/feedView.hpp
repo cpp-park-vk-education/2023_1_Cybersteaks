@@ -31,11 +31,11 @@ private:
     Wt::WContainerWidget *search_box_;
     Wt::WLineEdit *request_text_;
     Wt::Http::Client *client_;
-    std::vector<Group> groups_;
+    std::vector<Wt::Json::Value> groups_;
     Wt::WContainerWidget *groups_render_;
     Wt::Signal<std::string> internal_path_;
     void DoGetRequest(const std::string& url);
-    void RenderGroup(Group group);
+    void RenderGroup(const Wt::Json::Value& group);
     void RenderGroups();
     void LoadingInitialSize();
     void AddCssStyles();

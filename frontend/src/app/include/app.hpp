@@ -27,7 +27,7 @@ private:
     Wt::WContainerWidget *head_;
     Wt::WContainerWidget *body_;
     Token token;
-    User user;
+    std::string user;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);

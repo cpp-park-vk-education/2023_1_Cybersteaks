@@ -21,10 +21,15 @@
 
 class userView : public Wt::WContainerWidget {
 public:
-    userView(const User user);
+    userView(const std::string& n_username, const Token& n_token);
 private:
     User user;
+    Token token;
     Wt::WContainerWidget* head_;
     Wt::WContainerWidget* options_;
     Wt::WContainerWidget* body_;
+    void DoGetRequest(const std::string& url);
+    void HandleHttpResponse(std::error_code err, const Wt::Http::Message& response);
+
+    void AddCssStyles();
 };

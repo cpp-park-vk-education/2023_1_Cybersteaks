@@ -1,12 +1,7 @@
 #include "feedView.hpp"
 
 void feedView::LoadingInitialSize() {
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_[0]["name"] = "name1";
-    groups_[1]["name"] = "name2";
+    //
 }
 
 void feedView::DoGetRequest(const std::string& url) {
@@ -19,19 +14,19 @@ void feedView::DoGetRequest(const std::string& url) {
     };
 }
 
-void feedView::RenderGroup(Group group) {
+void feedView::RenderGroup(const Wt::Json::Value& group) {
     Wt::WContainerWidget* c_group = group_box_->addWidget(std::make_unique<Wt::WContainerWidget>());
     Wt::WContainerWidget* name = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    Wt::WContainerWidget* type = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    Wt::WContainerWidget* descriptions = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    name->addWidget(std::make_unique<Wt::WText>(std::string(group["name"])));
-    type->addWidget(std::make_unique<Wt::WText>(std::string(group["type"])));
-    descriptions->addWidget(std::make_unique<Wt::WText>(std::string(group["descriptions"])));
+    //Wt::WContainerWidget* type = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
+    //Wt::WContainerWidget* descriptions = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
+    name->addWidget(std::make_unique<Wt::WText>(group));
+    //type->addWidget(std::make_unique<Wt::WText>(std::string(group["type"])));
+    //descriptions->addWidget(std::make_unique<Wt::WText>(std::string(group["descriptions"])));
 
     c_group->addStyleClass("feed_group_unit");
     name->addStyleClass("feed_group_name");
-    type->addStyleClass("feed_group_type");
-    descriptions->addStyleClass("feed_group_descriptions");
+    //type->addStyleClass("feed_group_type");
+    //descriptions->addStyleClass("feed_group_descriptions");
 }
 
 void feedView::RenderGroups() {
@@ -50,12 +45,11 @@ void feedView::HandleHttpResponse(std::error_code err, const Wt::Http::Message& 
         Wt::Json::Array groups;
         groups_.clear();
         Wt::Json::parse(response.body(), json_body);
-        groups = json_body.get("groups");
+        groups = json_body.get("clusters");
         for (int i = 0; i < groups.size(); ++i) {
-            Group group;
-            Wt::Json::Object group_obj = groups[i];  
-            group.JsonParse(group_obj);
-            groups_.push_back(group);
+            Wt::Json::Value value = groups[i];
+            groups_.push_back(value);
+            
         }
         RenderGroups();
     }
