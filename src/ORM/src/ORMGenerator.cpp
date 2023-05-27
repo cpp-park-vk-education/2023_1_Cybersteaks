@@ -1,26 +1,24 @@
 #include "ORM.hpp"
+#include "ORMConstants.hpp"
 
 #include <nlohmann/json.hpp>
 #include <map>
 #include <fstream>
 #include <iostream>
-//#include <mysqlx/xdevapi.h>
 
-/*void ORMGenerator::Migrate()
+void ORMGenerator::Migrate()
 {
 
-    std::ifstream file(sources.find("models"));
-    nlohmann::json data;
-    file >> data;
-    file.close();
-    for (auto &table : data.items())
-        ORM::CreateTable(table.key(), table.value().get<std::map<std::string, std::string>>());
-}*/
-
-
-
-// int main()
-// {
-//     std::cout << test() << std::endl;
-//     return 0;
-// }
+    std::ifstream fileModels(MODELS);
+    std::ifstream fileSchema(SCHEMA);
+    nlohmann::json dataModels;
+    nlohmann::json dataSchema;
+    fileModels >> dataModels;
+    fileSchema >> dataSchema;
+    fileModels.close();
+    fileSchema.close();
+    for (auto &table : dataModels.items()){
+        //ORM::CreateTable(table.key(), table.value().get<std::map<std::string, std::string>>());
+        std::cout << table.key() << std::endl;
+    }
+}

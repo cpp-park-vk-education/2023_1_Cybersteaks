@@ -3,6 +3,7 @@
 
 int main()
 {
-    std::cout << test() << std::endl;
+    ORMGenerator test;
+    test.Migrate();
     return 0;
 }

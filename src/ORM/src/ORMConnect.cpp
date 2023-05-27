@@ -29,8 +29,7 @@ private:
 std::vector<mysqlx::Row> ORM::Select(const std::string &table)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
+
     mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
     mysqlx::RowResult result = dbTable.select("*").execute();
@@ -41,8 +40,7 @@ std::vector<mysqlx::Row> ORM::Select(const std::string &table)
 std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string &parameter)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
+
     mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
     mysqlx::RowResult result = dbTable.select("*").where(parameter).execute();
@@ -66,8 +64,6 @@ std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &
 bool ORM::Delete(const std::string &table, const std::string &object_id)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
@@ -89,8 +85,6 @@ bool ORM::Delete(const std::string &table, const std::string &object_id)
 bool ORM::Insert(const std::string &table, const std::map<std::string, std::string> &object)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
@@ -122,8 +116,6 @@ bool ORM::Insert(const std::string &table, const std::map<std::string, std::stri
 bool ORM::Update(const std::string &table, const std::map<std::string, std::string> &object)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     mysqlx::Schema db = (*connection).getSchema("fdf"); // поправить
     mysqlx::Table dbTable = db.getTable(table);
@@ -166,8 +158,6 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
 {
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     (*connection).startTransaction();
     try
@@ -191,8 +181,6 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
 bool ORM::DeleteTable(const std::string &table)
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     (*connection).startTransaction();
     try
@@ -209,11 +197,9 @@ bool ORM::DeleteTable(const std::string &table)
     return false;
 }
 
-bool ORM::DropDatabase(const std::string &database)
+bool ORM::DropDatabase()
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
-    if (!connection)
-        throw Error("Connection is failed.");
 
     try
     {
@@ -230,20 +216,23 @@ bool ORM::DropDatabase(const std::string &database)
 
 std::map<std::string, std::string> ORM::DatabaseInfo()
 {
-    std::ifstream jsonCnfig("../../config.json");
+    std::ifstream jsonConfig("../config.json");
     nlohmann::json config;
+    jsonConfig >> config;
+    jsonConfig.close();
     return config["Database"].get<std::map<std::string, std::string>>();
 }
 
 std::unique_ptr<mysqlx::Session> ORM::ConnectionDB()
 {
     std::map<std::string, std::string> databaseConfig = DatabaseInfo();
+
     try
     {
-        auto session = std::make_unique<mysqlx::Session>(databaseConfig["Host"],
-                                                         std::stoi(databaseConfig["Port"]),
-                                                         databaseConfig["Username"],
-                                                         databaseConfig["Password"]);
+        auto session = std::make_unique<mysqlx::Session>(DatabaseInfo()["Host"],
+                                                         std::stoi(DatabaseInfo()["Port"]),
+                                                         DatabaseInfo()["Username"],
+                                                         DatabaseInfo()["Password"]);
         return session;
     }
     catch (const mysqlx::Error &err)

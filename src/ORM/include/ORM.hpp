@@ -4,11 +4,6 @@
 #include <map>
 #include <vector>
 #include <mysqlx/xdevapi.h>
-
-std::string test()
-{
-    return "It works!";
-}
 class ORM
 {
 public:
@@ -20,11 +15,11 @@ public:
     static bool Update(const std::string &table, const std::map<std::string, std::string> &object);
     static bool CreateTable(const std::string &table, const std::map<std::string, std::string> &columns);
     static bool DeleteTable(const std::string &table);
-    static bool DropDatabase(const std::string &database);
+    static bool DropDatabase();
 
 private:
-    static std::unique_ptr<mysqlx::Session> ConnectionDB();
     static std::map<std::string, std::string> DatabaseInfo();
+    static std::unique_ptr<mysqlx::Session> ConnectionDB();
 };
 
 class ORMGenerator
@@ -35,10 +30,6 @@ public:
     void GenerateModelManager();
     void GenerateModels();
     void FillModels();
-
-    const std::map<std::string, std::string> sources = {
-        {"models", "../../models.json"},
-        {"schema", "../../schema.json"}};
 };
 
 template <typename Model>
