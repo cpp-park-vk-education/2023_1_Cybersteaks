@@ -17,7 +17,7 @@
         ORM::CreateTable(table.key(), table.value().get<std::map<std::string, std::string>>());
 }*/
 
-int main()
+std::string test()
 {
-    return  0;
+    return "It works!";
 }

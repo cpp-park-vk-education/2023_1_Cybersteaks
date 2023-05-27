@@ -3,3 +3,4 @@ drogon*
 .vscode
 wt-4.9.2
 mysql-connector-cpp
+src/mysql-connector-cpp-build
