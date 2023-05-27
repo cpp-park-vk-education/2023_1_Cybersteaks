@@ -5,35 +5,36 @@
 #include <vector>
 #include <mysqlx/xdevapi.h>
 
-const std::string pathToConfigFile = "../SQLConfig.txt";
-const std::string dataBaseName = "MockDB";
-
 class ORM
 {
 public:
-    static std::vector<mysqlx::Row> Select(std::string &table);
+    static std::vector<mysqlx::Row> Select(const std::string &table);
     static std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string &parametr);
-    static std::vector<mysqlx::Row> ORM::Find(const std::string &table, std::string &object_id);
+    static std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id);
     static bool Delete(const std::string &table, const std::string &object_id);
-    static bool Insert(const std::string &table, std::map<std::string, std::string> &object);
-    static bool Update(const std::string &table, std::map<std::string, std::string> &object);
-    static bool CreateTable(const std::string &table, std::map<std::string, std::string> &columns);
+    static bool Insert(const std::string &table, const std::map<std::string, std::string> &object);
+    static bool Update(const std::string &table, const std::map<std::string, std::string> &object);
+    static bool CreateTable(const std::string &table, const std::map<std::string, std::string> &columns);
     static bool DeleteTable(const std::string &table);
     static bool DropDatabase(const std::string &database);
 
 private:
     static std::unique_ptr<mysqlx::Session> ConnectionDB();
+    static std::map<std::string, std::string> DatabaseInfo();
 };
 
 class ORMGenerator
 {
 public:
-    const std::map<std::string, std::string> sources;
     void Migrate();
     void GenerateFilters();
     void GenerateModelManager();
     void GenerateModels();
     void FillModels();
+
+    const std::map<std::string, std::string> sources = {
+        {"models", "../../models.json"},
+        {"schema", "../../schema.json"}};
 };
 
 template <typename Model>

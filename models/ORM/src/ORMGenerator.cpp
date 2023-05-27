@@ -4,8 +4,9 @@
 #include <map>
 #include <fstream>
 #include <iostream>
+#include <mysqlx/xdevapi.h>
 
-void ORMGenerator::Migrate()
+/*void ORMGenerator::Migrate()
 {
 
     std::ifstream file(sources.find("models"));
@@ -14,4 +15,9 @@ void ORMGenerator::Migrate()
     file.close();
     for (auto &table : data.items())
         ORM::CreateTable(table.key(), table.value().get<std::map<std::string, std::string>>());
+}*/
+
+int main()
+{
+    return  0;
 }
