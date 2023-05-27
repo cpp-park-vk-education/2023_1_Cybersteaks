@@ -4,7 +4,7 @@
 #include <map>
 #include <fstream>
 #include <iostream>
-#include <mysqlx/xdevapi.h>
+//#include <mysqlx/xdevapi.h>
 
 /*void ORMGenerator::Migrate()
 {
@@ -17,7 +17,10 @@
         ORM::CreateTable(table.key(), table.value().get<std::map<std::string, std::string>>());
 }*/
 
-std::string test()
-{
-    return "It works!";
-}
+
+
+// int main()
+// {
+//     std::cout << test() << std::endl;
+//     return 0;
+// }
