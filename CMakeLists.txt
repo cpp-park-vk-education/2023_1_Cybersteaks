@@ -9,4 +9,3 @@ add_executable(INCrea_ORM src/ORM.cpp)
 add_subdirectory(src/ORM)
 
 target_link_libraries(INCrea_ORM ORM)
-

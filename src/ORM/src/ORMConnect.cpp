@@ -26,7 +26,7 @@ private:
     std::string message_;
 };
 
-std::vector<mysqlx::Row> ORM::Select(const std::string &table)
+std::vector<mysqlx::Row> ORM::Select(const std::string &table) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
@@ -37,7 +37,7 @@ std::vector<mysqlx::Row> ORM::Select(const std::string &table)
     return result.fetchAll();
 }
 
-std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string &parameter)
+std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string &parameter) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
@@ -48,7 +48,7 @@ std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string
     return result.fetchAll();
 }
 
-std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id)
+std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id) //work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -61,7 +61,7 @@ std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &
     return result.fetchAll();
 }
 
-bool ORM::Delete(const std::string &table, const std::string &object_id)
+bool ORM::Delete(const std::string &table, const std::string &object_id) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
@@ -72,6 +72,7 @@ bool ORM::Delete(const std::string &table, const std::string &object_id)
     try
     {
         dbTable.remove().where("ID = " + object_id).execute();
+        (*connection).commit();
         return true;
     }
     catch (const mysqlx::Error &err)
@@ -82,7 +83,7 @@ bool ORM::Delete(const std::string &table, const std::string &object_id)
     return false;
 }
 
-bool ORM::Insert(const std::string &table, const std::map<std::string, std::string> &object)
+bool ORM::Insert(const std::string &table, const std::map<std::string, std::string> &object) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
@@ -113,11 +114,11 @@ bool ORM::Insert(const std::string &table, const std::map<std::string, std::stri
     return false;
 }
 
-bool ORM::Update(const std::string &table, const std::map<std::string, std::string> &object)
+bool ORM::Update(const std::string &table, const std::map<std::string, std::string> &object) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema("fdf"); // поправить
+    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
 
     const std::string id = object.at("id");
@@ -137,11 +138,10 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
     (*connection).startTransaction();
     try
     {
-        mysqlx::TableUpdate updateTable = dbTable.update();
-        for (int i = 0; i < object.size(); ++i)
-            updateTable.set(fields[i], values[i]);
-
-        updateTable.where("id = " + id).execute();
+        mysqlx::TableUpdate updatedTable = dbTable.update();
+        for (size_t i = 0; i != fields.size(); ++i)
+            updatedTable.set(fields[i], values[i]);
+        updatedTable.where("id = " + id).execute();
 
         (*connection).commit();
         return true;
@@ -154,7 +154,7 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
     return false;
 }
 
-bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types)
+bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types) // work
 {
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
@@ -162,11 +162,15 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
     (*connection).startTransaction();
     try
     {
-        std::string SQLRequest = "CREATE TABLE " + table + "(\n";
+        (*connection).sql("USE " + DatabaseInfo()["Name"] + ";").execute();
+        std::string SQLRequest = "CREATE TABLE " + table + "\n(\n";
         for (auto &column : columns_names_and_types)
-            SQLRequest += column.first + " " + column.second + "\n";
-        SQLRequest += ");";
-        (*connection).sql(SQLRequest);
+            SQLRequest += "    " + column.first + " " + column.second + ",\n";
+        SQLRequest.pop_back();
+        SQLRequest.pop_back();
+        SQLRequest += "\n);";
+        std::cout << SQLRequest << std::endl;
+        (*connection).sql(SQLRequest).execute();
         (*connection).commit();
         return true;
     }
@@ -178,14 +182,15 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
     return false;
 }
 
-bool ORM::DeleteTable(const std::string &table)
+bool ORM::DeleteTable(const std::string &table) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
     (*connection).startTransaction();
     try
     {
-        (*connection).sql("DROP TABLE " + table);
+        (*connection).sql("USE " + DatabaseInfo()["Name"] + ";").execute();
+        (*connection).sql("DROP TABLE " + table + ";").execute();
         (*connection).commit();
         return true;
     }
@@ -197,7 +202,7 @@ bool ORM::DeleteTable(const std::string &table)
     return false;
 }
 
-bool ORM::DropDatabase()
+bool ORM::DropDatabase() // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
@@ -214,7 +219,7 @@ bool ORM::DropDatabase()
     return false;
 }
 
-std::map<std::string, std::string> ORM::DatabaseInfo()
+std::map<std::string, std::string> ORM::DatabaseInfo() // work
 {
     std::ifstream jsonConfig("../config.json");
     nlohmann::json config;
@@ -223,7 +228,7 @@ std::map<std::string, std::string> ORM::DatabaseInfo()
     return config["Database"].get<std::map<std::string, std::string>>();
 }
 
-std::unique_ptr<mysqlx::Session> ORM::ConnectionDB()
+std::unique_ptr<mysqlx::Session> ORM::ConnectionDB() // work
 {
     std::map<std::string, std::string> databaseConfig = DatabaseInfo();
 

@@ -11,7 +11,7 @@
         "creation_date": "date",
         "birthday": "date"
     },
-    "Groups": {
+    "Users_groups": {
         "id": "integer",
         "name": "string",
         "descriptions": "string",
@@ -26,7 +26,7 @@
         "group_id": "integer"
     },
     "Likes": {
-        "ID": "integer",
+        "id": "integer",
         "user_id": "integer",
         "post_id": "integer"
     },

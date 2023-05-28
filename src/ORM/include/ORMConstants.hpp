@@ -7,7 +7,7 @@ const std::string CONFIG = "../config.json";
 
 
 const std::map<std::string, std::string> convertTypes = {
-    {"integer", "INTEGER"},
+    {"integer", "INT"},
     {"string", "TEXT"},
     {"foreign_key", "FOREIGN KEY"},
     {"date", "DATETIME"}};
