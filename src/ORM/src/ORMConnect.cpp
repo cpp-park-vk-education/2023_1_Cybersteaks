@@ -48,7 +48,7 @@ std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string
     return result.fetchAll();
 }
 
-std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id) //work
+std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &object_id) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
     if (!connection)
@@ -154,10 +154,12 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
     return false;
 }
 
-bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types) // work
+bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types, bool relatedTable) // work
 {
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
+
+    std::map<std::string, std::string> foreignKeys;
 
     (*connection).startTransaction();
     try
@@ -165,7 +167,19 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
         (*connection).sql("USE " + DatabaseInfo()["Name"] + ";").execute();
         std::string SQLRequest = "CREATE TABLE " + table + "\n(\n";
         for (auto &column : columns_names_and_types)
-            SQLRequest += "    " + column.first + " " + column.second + ",\n";
+            if (column.second != "FOREIGN KEY")
+                SQLRequest += "    " + column.first + " " + column.second + ",\n";
+            else
+            {
+                std::string refTable = column.first.substr(0, column.first.find("_") - 1);
+                std::string field = column.first.substr(column.first.find("_") + 1, column.first.size() - 1);
+                foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + " (" + field + "),\n";
+            }
+        if (relatedTable)
+        {
+            for (auto &key : foreignKeys)
+                SQLRequest += key.second;
+        }
         SQLRequest.pop_back();
         SQLRequest.pop_back();
         SQLRequest += "\n);";

@@ -11,7 +11,7 @@
         "creation_date": "date",
         "birthday": "date"
     },
-    "Users_groups": {
+    "UsersGroups": {
         "id": "integer",
         "name": "string",
         "descriptions": "string",
@@ -30,7 +30,7 @@
         "user_id": "integer",
         "post_id": "integer"
     },
-    "Post_content": {
+    "PostContent": {
         "ID": "integer",
         "href": "string",
         "post_id": "integer"
