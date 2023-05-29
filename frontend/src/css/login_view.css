@@ -1,0 +1,73 @@
+.login_body {
+  margin: 0 auto;
+  margin-top: 0;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0);
+  height: 100vh;
+  background: linear-gradient(180deg, #323540 0%, #394A5D 100%);
+  position: relative;
+}
+  
+.login_body .login_form {
+  margin: 0 auto;
+  display: block;
+  width: 25%;
+  margin-top: 50vh;
+  transform: translate(0, -50%);
+}
+
+.login_body .login_form .login_form_text {
+  color: white;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.login_body .login_form .login_form_username, .login_body .login_form .login_form_password {
+  width: 100%;
+  box-sizing: border-box;
+  
+}
+
+.login_body .login_form .login_form_username input, .login_body .login_form .login_form_password input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 0.3rem;
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.login_body .login_form .login_form_button {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 0.7rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  transition-duration: 0.3s;
+  user-select: none;
+}
+
+.login_body .login_form .login_form_button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transition-duration: 0.3s;
+}
+
+.login_body .login_form .login_form_button span {
+  color: white;
+}
+
+.login_body .login_form .login_form_link {
+  color: white;
+  text-align: center;
+  font-size: 0.7rem;
+  padding: 0.5rem;
+  user-select: none;
+}
+
+.login_body .login_form .login_form_link:hover {
+  text-decoration: underline;
+}
