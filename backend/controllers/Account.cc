@@ -172,8 +172,8 @@ void Account::posts(const HttpRequestPtr &req, std::function<void(const HttpResp
 
         std::vector<std::string> posts = {"I'm a session guitarist, looking for a band to play together, rehearse. I like to play electric guitar, especially solo! I play mostly hard rock, blues rock.",
         "Hi! I'm looking for a talented songwriter, I'm a good performer, but writing is much worse. Write, I'm waiting for feedback!",
-            "We are an aspiring rock band from St. Petersburg, we are looking for a handy technician, namely a sound engineer, it will be great if you are also a sound engineer, write, we are waiting for you!",
-            "I'm looking for a trumpeter for joint jams and rehearsals", "I love country and blues, I play the guitar and harmonica, a talented keyboard player!"}; // from db
+        "We are an aspiring rock band from St. Petersburg, we are looking for a handy technician, namely a sound engineer, it will be great if you are also a sound engineer, write, we are waiting for you!",
+        "I'm looking for a trumpeter for joint jams and rehearsals", "I love country and blues, I play the guitar and harmonica, a talented keyboard player!"}; // from db
         json["posts"] = Json::arrayValue;
 
         for (const std::string& post : posts) {
