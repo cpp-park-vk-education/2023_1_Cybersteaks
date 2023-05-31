@@ -61,6 +61,7 @@ bool ORM::Delete(const std::string &table, const std::string &object_id) // work
     catch (const mysqlx::Error &err)
     {
         connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -92,6 +93,7 @@ bool ORM::Insert(const std::string &table, const std::map<std::string, std::stri
     catch (const mysqlx::Error &err)
     {
         connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -132,6 +134,7 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
     catch (const mysqlx::Error &err)
     {
         connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -174,6 +177,7 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
     catch (const mysqlx::Error &err)
     {
         connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -187,13 +191,14 @@ bool ORM::DeleteTable(const std::string &table) // work
     try
     {
         connection->sql("USE " + DatabaseInfo()["Name"] + ";").execute();
-        connection->sql("DROP TABLE " + table + ";").execute();
+        connection->sql("DROP TABLE " + table + " CASCADE;").execute();
         connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
         connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -210,7 +215,7 @@ bool ORM::DropDatabase() // work
     }
     catch (const Error &err)
     {
-        std::cerr << "Error: " << err.what() << std::endl;
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -227,7 +232,7 @@ bool ORM::CreateDatabase() // work
     }
     catch (const Error &err)
     {
-        std::cerr << "Error: " << err.what() << std::endl;
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
