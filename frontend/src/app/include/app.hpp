@@ -11,10 +11,14 @@
 #include <Wt/WText.h>
 #include <Wt/Http/Client.h>
 #include <Wt/Json/Parser.h>
+#include <Wt/Json/Object.h>
 #include <Wt/WImage.h>
+#include <Wt/WSignal.h>
 
 #include "feedView.hpp"
 #include "loginView.hpp"
+#include "userView.hpp"
+#include "postView.hpp"
 #include "store.hpp"
 #include "model.hpp"
 
@@ -27,8 +31,21 @@ private:
     Wt::WContainerWidget *head_;
     Wt::WContainerWidget *body_;
     Token token;
-    User user;
+    Wt::Json::Object user_;
+    std::string username_;
+    feedView* feedView_;
+    userView* userView_;
+    loginView* loginView_;
+    postView* postView_;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);
+    void CreateViews();
+    void CreateConnectForViews();
+    void HideViews();
+
+    void CreateFeedView();
+    void CreateLoginView();
+    void CreateUserPageView();
+    void CreatePostView();
 };

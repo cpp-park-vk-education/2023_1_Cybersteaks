@@ -1,0 +1,79 @@
+.user_head {
+    background: linear-gradient(180deg, #232837 0%, #3B4B5F 100%);
+    margin: 0 auto;
+    color: white;
+}
+  
+.user_block {
+    margin: 0 auto;
+    display: inline-block;
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.user_block img {
+  width: 80%;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+}
+  
+.user_block div {
+    display: flex;
+    text-align: center;
+}
+  
+.user_block div div {
+    padding: 0.5rem;
+}
+  
+.user_block div span {
+    margin: 0 auto;
+    text-align: center;
+}
+  
+.user_options {
+    padding: 0;
+    display: flex;
+}
+  
+.user_options div {
+    width: 50%;
+    text-align: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+}
+  
+.user_main {
+    padding: 1rem;
+}
+
+.user_body {
+    background: linear-gradient(180deg, #323540 0%, #394A5D 100%);
+    min-height: 100vh;
+    margin-top: 0;
+    padding-top: 1rem;
+    border: 1px solid #323540;
+    color: white;
+}
+
+.user_select {
+    background: rgba(255, 255, 255, 0.2);
+    transition-duration: 0.3s;
+}
+
+.user_non_select {
+    transition-duration: 0.3s;
+}
+
+.user_portfolio_op, .user_blog_op {
+    user-select: none;
+}
+
+.post_name {
+    margin-bottom: 0.5rem;
+}
+
+.post_text {
+    margin-bottom: 2rem;
+    text-align: justify;
+}

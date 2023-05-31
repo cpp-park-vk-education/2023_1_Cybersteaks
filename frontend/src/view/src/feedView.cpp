@@ -1,12 +1,7 @@
 #include "feedView.hpp"
 
 void feedView::LoadingInitialSize() {
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_.push_back(Group());
-    groups_[0]["name"] = "name1";
-    groups_[1]["name"] = "name2";
+    //
 }
 
 void feedView::DoGetRequest(const std::string& url) {
@@ -19,19 +14,12 @@ void feedView::DoGetRequest(const std::string& url) {
     };
 }
 
-void feedView::RenderGroup(Group group) {
+void feedView::RenderGroup(const Wt::Json::Value& group) {
     Wt::WContainerWidget* c_group = group_box_->addWidget(std::make_unique<Wt::WContainerWidget>());
     Wt::WContainerWidget* name = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    Wt::WContainerWidget* type = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    Wt::WContainerWidget* descriptions = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
-    name->addWidget(std::make_unique<Wt::WText>(std::string(group["name"])));
-    type->addWidget(std::make_unique<Wt::WText>(std::string(group["type"])));
-    descriptions->addWidget(std::make_unique<Wt::WText>(std::string(group["descriptions"])));
-
+    name->addWidget(std::make_unique<Wt::WText>(std::string(group)));
     c_group->addStyleClass("feed_group_unit");
     name->addStyleClass("feed_group_name");
-    type->addStyleClass("feed_group_type");
-    descriptions->addStyleClass("feed_group_descriptions");
 }
 
 void feedView::RenderGroups() {
@@ -50,13 +38,12 @@ void feedView::HandleHttpResponse(std::error_code err, const Wt::Http::Message& 
         Wt::Json::Array groups;
         groups_.clear();
         Wt::Json::parse(response.body(), json_body);
-        groups = json_body.get("groups");
+        groups = json_body.get("clusters");
         for (int i = 0; i < groups.size(); ++i) {
-            Group group;
-            Wt::Json::Object group_obj = groups[i];  
-            group.JsonParse(group_obj);
-            groups_.push_back(group);
+            Wt::Json::Value value = groups[i];
+            groups_.push_back(value);
         }
+        std::cout << "start render groups" << std::endl;
         RenderGroups();
     }
     else if (response.status() != 200) {
@@ -76,8 +63,13 @@ void feedView::AddCssStyles() {
     user_icon_->addStyleClass("feed_user_icon");
 }
 
+void feedView::ShowingFunction() {
+    DoGetRequest("http://127.0.0.1:1026/clusters");
+}
+
 feedView::feedView()
 {
+    std::cout << "FEED VIEW IS START TO WORK" << std::endl;
     LoadingInitialSize();
     header_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());
     user_icon_ = header_->addWidget(std::make_unique<Wt::WImage>("src/images/little_user.svg"));
@@ -101,7 +93,12 @@ feedView::feedView()
 
     body_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());
     group_box_ = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
-    RenderGroups();
+
+    Wt::WContainerWidget* button = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    button->addWidget(std::make_unique<Wt::WText>("Go to posts"));
+    button->clicked().connect([=] (const Wt::WMouseEvent& e) {
+        internal_path_.emit("/posts");
+    });
 
     client_ = addChild(std::make_unique<Wt::Http::Client>());
     client_->done().connect(this, &feedView::HandleHttpResponse);

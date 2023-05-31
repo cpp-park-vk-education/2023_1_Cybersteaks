@@ -19,9 +19,9 @@ void loginView::DoGetRequest(const std::string& url) {
     std::cout << "=============GET REQUEST" << std::endl;
     Wt::Http::Message message;
     message.addHeader("Content-Type", "application/json");
-    message.addBodyText("{\"username\": \"" + username_->text().toUTF8() + "\", \"password\": \"" + password_->text().toUTF8() + "\"}");
+    message.addBodyText("{\"login\": \"" + username_->valueText().toUTF8() + "\", \"password\": \"" + password_->valueText().toUTF8() + "\"}");
     if (client_->post(url, message)) {
-        username = username_->text().toUTF8();
+        username = username_->valueText().toUTF8();
     }
     else {
         std::cout << "URL ERROR" << std::endl;
@@ -36,10 +36,11 @@ void loginView::HandleHttpResponse(std::error_code err, const Wt::Http::Message&
         std::cout << response.body() << std::endl;
         Wt::Json::Object json_body;
         Wt::Json::parse(response.body(), json_body);
-        //get token from response
-        Wt::Json::Value token_value = json_body.get("token").toString();
+        Wt::Json::Value token_value = json_body.get("token");
+        std::cout << std::string(json_body.get("token")) << std::endl;
         error = "";
-        token = std::string(token_value);
+        token = std::string(json_body.get("token"));
+        GoToTheUserPage();
     }
     else if (response.status() != 200) {
         std::cout << "Err:";
@@ -64,8 +65,7 @@ loginView::loginView() {
     button_ = form_->addWidget(std::make_unique<Wt::WContainerWidget>());
     button_->addWidget(std::make_unique<Wt::WText>("войти"));
     button_->clicked().connect([=] (const Wt::WMouseEvent& e) {
-        DoGetRequest(""); //it's url for creating token
-        GoToTheUserPage();
+        DoGetRequest("http://127.0.0.1:1026/account/login"); //it's url for creating token
     });
     reg_link_ = form_->addWidget(std::make_unique<Wt::WContainerWidget>());
     Wt::WText* link = reg_link_->addWidget(std::make_unique<Wt::WText>("Регистрация"));

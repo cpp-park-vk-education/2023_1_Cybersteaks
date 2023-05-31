@@ -9,3 +9,8 @@ target_link_libraries(loginView model)
 add_library(userView src/userView.cpp)
 target_include_directories(userView PUBLIC include)
 target_link_libraries(userView model)
+target_link_libraries(userView postView)
+
+add_library(postView src/postView.cpp)
+target_include_directories(postView PUBLIC include)
+target_link_libraries(postView model)
