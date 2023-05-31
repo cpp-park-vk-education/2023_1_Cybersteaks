@@ -11,28 +11,39 @@
         "creation_date": "date",
         "birthday": "date"
     },
-    "UsersGroups": {
+    "UsersGroup": {
         "id": "integer",
         "name": "string",
         "descriptions": "string",
         "photo": "string",
         "type": "string"
     },
+    "Subscription": {
+        "id": "integer",
+        "type": "string",
+        "Users_id": "foreign_key",
+        "UsersGroup_id": "foreign_key"
+    },
+    "PostLike": {
+        "id": "integer",
+        "Users_id": "foreign_key",
+        "Post_id": "foreign_key"
+    },
     "Post": {
         "id": "integer",
         "content": "string",
         "creation_date": "date",
         "likes": "integer",
-        "group_id": "integer"
-    },
-    "Likes": {
-        "id": "integer",
-        "user_id": "integer",
-        "post_id": "integer"
+        "UsersGroup_id": "foreign_key"
     },
     "PostContent": {
-        "ID": "integer",
+        "id": "integer",
         "href": "string",
-        "post_id": "integer"
+        "Post_id": "foreign_key"
+    },
+    "PostHref": {
+        "id": "integer",
+        "href": "string",
+        "PostContent_id": "foreign_key"
     }
 }

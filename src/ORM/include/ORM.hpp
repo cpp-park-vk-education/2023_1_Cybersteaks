@@ -13,9 +13,10 @@ public:
     static bool Delete(const std::string &table, const std::string &object_id);
     static bool Insert(const std::string &table, const std::map<std::string, std::string> &object);
     static bool Update(const std::string &table, const std::map<std::string, std::string> &object);
-    static bool CreateTable(const std::string &table, const std::map<std::string, std::string> &columns, bool relatedTable);
+    static bool CreateTable(const std::string &table, const std::map<std::string, std::string> &columns);
     static bool DeleteTable(const std::string &table);
     static bool DropDatabase();
+    static bool CreateDatabase();
 
 private:
     static std::map<std::string, std::string> DatabaseInfo();
@@ -37,7 +38,7 @@ class IModelManager
 public:
     std::vector<Model> All();
     std::vector<Model> Filter(Model filter_object);
-    std::string Get(std::vector<size_t> objects_id);
+    std::string Get(std::vector<mysqlx::Row> objects_id);
     void Delete(Model filter_object);
     void Insert(Model object);
 

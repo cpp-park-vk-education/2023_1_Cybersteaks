@@ -1,18 +1,30 @@
 {
-    "Subscriptions": {
+    "Subscription": {
         "id": "integer",
         "type": "string",
         "Users_id": "foreign_key",
-        "UsersGroups_id": "foreign_key"
+        "UsersGroup_id": "foreign_key"
     },
-    "Likes": {
+    "PostLike": {
         "id": "integer",
         "Users_id": "foreign_key",
         "Post_id": "foreign_key"
     },
     "Post": {
         "id": "integer",
+        "content": "string",
+        "creation_date": "date",
+        "likes": "integer",
+        "UsersGroup_id": "foreign_key"
+    },
+    "PostContent": {
+        "id": "integer",
         "href": "string",
         "Post_id": "foreign_key"
+    },
+    "PostHref": {
+        "id": "integer",
+        "href": "string",
+        "PostContent_id": "foreign_key"
     }
 }

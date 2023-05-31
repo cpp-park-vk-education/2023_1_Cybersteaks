@@ -1,8 +1,11 @@
 #include "ORM.hpp"
 #include "ORMConstants.hpp"
+#include "TopologicalSort.hpp"
+#include "Exeption.hpp"
 
 #include <nlohmann/json.hpp>
 #include <map>
+#include <deque>
 #include <fstream>
 #include <iostream>
 
@@ -10,28 +13,39 @@ void ORMGenerator::Migrate()
 {
 
     std::ifstream fileModels(MODELS);
-    std::ifstream fileSchema(SCHEMA);
     nlohmann::json dataModels;
-    nlohmann::json dataSchema;
     fileModels >> dataModels;
-    fileSchema >> dataSchema;
     fileModels.close();
-    fileSchema.close();
+
+    ORM::DropDatabase();
+    ORM::CreateDatabase();
+
+    std::vector<std::pair<std::string, std::map<std::string, std::string>>> tables;
+
     for (auto &table : dataModels.items())
+        tables.push_back(std::pair(table.key(), table.value().get<std::map<std::string, std::string>>()));
+
+    ListGraph graph(tables.size());
+
+    for (int i = 0; i < tables.size(); ++i)
     {
-        std::map<std::string, std::string> values = table.value().get<std::map<std::string, std::string>>();
-        for (auto &[key, value] : values)
-            value = convertTypes.at(value);
-        std::cout << ORM::DeleteTable(table.key());
-        //std::cout << ORM::CreateTable(table.key(), values, false);
+        std::vector<std::string> foreignKeys;
+        for (auto &field : tables[i].second)
+            if (field.second == "foreign_key")
+                foreignKeys.push_back(field.first.substr(0, field.first.find("_")));
+        if (foreignKeys.size() == 0)
+            graph.AddEdge(i, i);
+        else
+        {
+            for (std::string &foreignKey : foreignKeys)
+            {
+                auto iteratorOnTable = std::find_if(tables.begin(), tables.end(), [&](const std::pair<std::string, std::map<std::string, std::string>> &table)
+                                                    { return table.first == foreignKey; });
+                graph.AddEdge(i, std::distance(tables.begin(), iteratorOnTable));
+            }
+        }
     }
 
-    for (auto &table : dataSchema.items())
-    {
-        std::map<std::string, std::string> values = table.value().get<std::map<std::string, std::string>>();
-        for (auto &[key, value] : values)
-            value = convertTypes.at(value);
-        std::cout << ORM::DeleteTable(table.key());
-        // std::cout << ORM::CreateTable(table.key(), values, true);
-    }
+    for (int vertex : mainTopologicalSort(graph))
+        std::cout << vertex << std::endl;;
 }
