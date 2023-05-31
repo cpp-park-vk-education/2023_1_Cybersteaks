@@ -156,7 +156,7 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
             {
                 std::string refTable = column.first.substr(0, column.first.find("_"));
                 std::string field = column.first.substr(column.first.find("_") + 1, column.first.size() - 1);
-                foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + "(" + field + "),\n";
+                foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + "(" + field + ") ON DELETE CASCADE,\n";
             }
         SQLRequest += "    PRIMARY KEY (id),\n";
         if (foreignKeys.size() != 0)
