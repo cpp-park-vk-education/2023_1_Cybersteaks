@@ -14,3 +14,7 @@ target_link_libraries(userView postView)
 add_library(postView src/postView.cpp)
 target_include_directories(postView PUBLIC include)
 target_link_libraries(postView model)
+
+add_library(newPostView src/newPostView.cpp)
+target_include_directories(newPostView PUBLIC include)
+target_link_libraries(newPostView userView)

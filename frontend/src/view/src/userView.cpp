@@ -98,6 +98,13 @@ userView::userView(const std::string& token) {
         logout_.emit();
     });
     user_widget_ = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
+
+    Wt::WContainerWidget* functions = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    Wt::WContainerWidget* settings = functions->addWidget(std::make_unique<Wt::WContainerWidget>());
+    Wt::WContainerWidget* add_post = functions->addWidget(std::make_unique<Wt::WContainerWidget>());
+    settings->addWidget(std::make_unique<Wt::WImage>("src/images/settings.svg"));
+    add_post->addWidget(std::make_unique<Wt::WImage>("src/images/add.svg"));
+
     options_ = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
 
     portfolio_option_ = options_->addWidget(std::make_unique<Wt::WContainerWidget>());
@@ -147,6 +154,7 @@ userView::userView(const std::string& token) {
     AddCssStyles();
     go_to_main->addStyleClass("user_main");
     logout_widget->addStyleClass("user_logout");
+    functions->addStyleClass("user_functions");
 
     DoGetRequest("http://127.0.0.1:1026/account/settings");
 }

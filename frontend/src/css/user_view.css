@@ -76,6 +76,23 @@
     padding: 1rem;
 }
 
+.user_functions {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.user_functions div {
+    width: 3rem;
+    height: 3rem;
+}
+
+.user_functions div img {
+    width: 100%;
+}
+
 .post_name {
     margin-bottom: 0.5rem;
     font-size: 1.2rem;

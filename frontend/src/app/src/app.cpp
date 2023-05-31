@@ -121,9 +121,7 @@ INcreaApplication::INcreaApplication(const Wt::WEnvironment& env)
     head_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     body_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     Clear();
-    std::cout << "CREATING STATIC" << std::endl;
     CreateStatic();
-    std::cout << "HANDLE PATH " << internalPath() << std::endl;
     CreateViews();
     CreateConnectForViews();
     HandlePathChange(internalPath());
