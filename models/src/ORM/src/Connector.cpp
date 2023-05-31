@@ -1,4 +1,5 @@
 #include "ORM.hpp"
+#include "Exeption.hpp"
 
 #include <map>
 #include <string>
@@ -8,29 +9,11 @@
 #include <nlohmann/json.hpp>
 #include <mysqlx/xdevapi.h>
 
-class Error : public std::exception
-{
-public:
-    Error(const std::string &message) : message_(message) {}
-
-    const char *what() const noexcept override
-    {
-        return message_.c_str();
-    }
-    const std::string getMessage() const
-    {
-        return message_;
-    }
-
-private:
-    std::string message_;
-};
-
 std::vector<mysqlx::Row> ORM::Select(const std::string &table) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
     mysqlx::RowResult result = dbTable.select("*").execute();
 
@@ -41,7 +24,7 @@ std::vector<mysqlx::Row> ORM::Filter(const std::string &table, const std::string
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
     mysqlx::RowResult result = dbTable.select("*").where(parameter).execute();
 
@@ -54,7 +37,7 @@ std::vector<mysqlx::Row> ORM::Find(const std::string &table, const std::string &
     if (!connection)
         throw Error("Connection is failed.");
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
     mysqlx::RowResult result = dbTable.select("*").where("ID = " + object_id).execute();
 
@@ -65,19 +48,20 @@ bool ORM::Delete(const std::string &table, const std::string &object_id) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
 
-    (*connection).startTransaction();
+    connection->startTransaction();
     try
     {
         dbTable.remove().where("ID = " + object_id).execute();
-        (*connection).commit();
+        connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
-        (*connection).rollback();
+        connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -87,7 +71,7 @@ bool ORM::Insert(const std::string &table, const std::map<std::string, std::stri
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
 
     std::vector<std::string> fields;
@@ -99,16 +83,17 @@ bool ORM::Insert(const std::string &table, const std::map<std::string, std::stri
         values.push_back(field->second);
     }
 
-    (*connection).startTransaction();
+    connection->startTransaction();
     try
     {
         dbTable.insert(fields.begin(), fields.end()).values(values.begin(), values.end()).execute();
-        (*connection).commit();
+        connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
-        (*connection).rollback();
+        connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -118,7 +103,7 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    mysqlx::Schema db = (*connection).getSchema(DatabaseInfo()["Name"]);
+    mysqlx::Schema db = connection->getSchema(DatabaseInfo()["Name"]);
     mysqlx::Table dbTable = db.getTable(table);
 
     const std::string id = object.at("id");
@@ -135,7 +120,7 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
         }
     }
 
-    (*connection).startTransaction();
+    connection->startTransaction();
     try
     {
         mysqlx::TableUpdate updatedTable = dbTable.update();
@@ -143,39 +128,41 @@ bool ORM::Update(const std::string &table, const std::map<std::string, std::stri
             updatedTable.set(fields[i], values[i]);
         updatedTable.where("id = " + id).execute();
 
-        (*connection).commit();
+        connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
-        (*connection).rollback();
+        connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
 }
 
-bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types, bool relatedTable) // work
+bool ORM::CreateTable(const std::string &table, const std::map<std::string, std::string> &columns_names_and_types) // Don't work
 {
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
     std::map<std::string, std::string> foreignKeys;
 
-    (*connection).startTransaction();
+    connection->startTransaction();
     try
     {
-        (*connection).sql("USE " + DatabaseInfo()["Name"] + ";").execute();
+        connection->sql("USE " + DatabaseInfo()["Name"] + ";").execute();
         std::string SQLRequest = "CREATE TABLE " + table + "\n(\n";
         for (auto &column : columns_names_and_types)
             if (column.second != "FOREIGN KEY")
                 SQLRequest += "    " + column.first + " " + column.second + ",\n";
             else
             {
-                std::string refTable = column.first.substr(0, column.first.find("_") - 1);
+                std::string refTable = column.first.substr(0, column.first.find("_"));
                 std::string field = column.first.substr(column.first.find("_") + 1, column.first.size() - 1);
-                foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + " (" + field + "),\n";
+                foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + "(" + field + ") ON DELETE CASCADE,\n";
             }
-        if (relatedTable)
+        SQLRequest += "    PRIMARY KEY (id),\n";
+        if (foreignKeys.size() != 0)
         {
             for (auto &key : foreignKeys)
                 SQLRequest += key.second;
@@ -183,14 +170,14 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
         SQLRequest.pop_back();
         SQLRequest.pop_back();
         SQLRequest += "\n);";
-        std::cout << SQLRequest << std::endl;
-        (*connection).sql(SQLRequest).execute();
-        (*connection).commit();
+        connection->sql(SQLRequest).execute();
+        connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
-        (*connection).rollback();
+        connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -200,17 +187,18 @@ bool ORM::DeleteTable(const std::string &table) // work
 {
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    (*connection).startTransaction();
+    connection->startTransaction();
     try
     {
-        (*connection).sql("USE " + DatabaseInfo()["Name"] + ";").execute();
-        (*connection).sql("DROP TABLE " + table + ";").execute();
-        (*connection).commit();
+        connection->sql("USE " + DatabaseInfo()["Name"] + ";").execute();
+        connection->sql("DROP TABLE " + table + " CASCADE;").execute();
+        connection->commit();
         return true;
     }
     catch (const mysqlx::Error &err)
     {
-        (*connection).rollback();
+        connection->rollback();
+        std::cerr << err.what() << std::endl;
     }
 
     return false;
@@ -222,12 +210,29 @@ bool ORM::DropDatabase() // work
 
     try
     {
-        (*connection).dropSchema(DatabaseInfo()["Name"]);
+        connection->dropSchema(DatabaseInfo()["Name"]);
         return true;
     }
     catch (const Error &err)
     {
-        std::cerr << "Error: " << err.what() << std::endl;
+        std::cerr << err.what() << std::endl;
+    }
+
+    return false;
+}
+
+bool ORM::CreateDatabase() // work
+{
+    std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
+
+    try
+    {
+        connection->createSchema(DatabaseInfo()["Name"]);
+        return true;
+    }
+    catch (const Error &err)
+    {
+        std::cerr << err.what() << std::endl;
     }
 
     return false;

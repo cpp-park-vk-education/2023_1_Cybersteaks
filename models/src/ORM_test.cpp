@@ -1,10 +1,9 @@
-#include "ORM/src/Generator.cpp"
+#include "Generator.hpp"
 #include <iostream>
 
 int main()
 {
     ORMGenerator test;
-    test.Generate();
-    std::cout << "test";
+    test.Migrate();
     return 0;
-} 
+}

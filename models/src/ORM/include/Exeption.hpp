@@ -19,4 +19,3 @@ public:
 private:
     std::string message_;
 };
-

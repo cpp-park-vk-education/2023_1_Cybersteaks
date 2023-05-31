@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <map>
 #include <vector>
@@ -9,7 +11,7 @@ class ORMGenerator
 {
 private:
     std::stringstream out;
-    const std::string model_out = "../models.hpp";
+    const std::string modelsOut = "../models.hpp";
 
 public:
     void Migrate();
