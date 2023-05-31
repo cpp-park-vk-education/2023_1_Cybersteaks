@@ -42,9 +42,4 @@ private:
     void CreateViews();
     void CreateConnectForViews();
     void HideViews();
-
-    void CreateFeedView();
-    void CreateLoginView();
-    void CreateUserPageView();
-    void CreatePostView();
 };
