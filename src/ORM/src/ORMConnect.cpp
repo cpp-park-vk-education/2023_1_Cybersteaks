@@ -167,7 +167,6 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
         SQLRequest.pop_back();
         SQLRequest.pop_back();
         SQLRequest += "\n);";
-        std::cout << SQLRequest << std::endl;
         connection->sql(SQLRequest).execute();
         connection->commit();
         return true;
