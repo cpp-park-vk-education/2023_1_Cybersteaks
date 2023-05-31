@@ -92,6 +92,11 @@ userView::userView(const std::string& token) {
         go_to_main_page_.emit();
     });
     Wt::WContainerWidget* logout_widget = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    logout_widget->addWidget(std::make_unique<Wt::WText>("Выход"));
+    logout_widget->clicked().connect([=] (const Wt::WMouseEvent& e) {
+        UpdateToken("");
+        logout_.emit();
+    });
     user_widget_ = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
     options_ = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
 

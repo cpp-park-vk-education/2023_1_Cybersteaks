@@ -104,6 +104,11 @@ void INcreaApplication::CreateConnectForViews() {
         app->setInternalPath("/");
         HandlePathChange("/");
     });
+    userView_->logout().connect(this, [=] () {
+        token.SetToken("");
+        app->setInternalPath("/login");
+        HandlePathChange("/login");
+    });
 
     loginView_->internal_path().connect(this, [=] (const std::string& new_token, const std::string& username, const std::string& error) {
         if (error == "") {

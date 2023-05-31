@@ -69,6 +69,13 @@
     user-select: none;
 }
 
+.user_logout {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 1rem;
+}
+
 .post_name {
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
