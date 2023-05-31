@@ -20,7 +20,7 @@ void ORMGenerator::Migrate()
     ORM::DropDatabase();
     ORM::CreateDatabase();
 
-    std::vector<std::pair<std::string, std::map< std::string, std::string>>> tables;
+    std::vector<std::pair<std::string, std::map<std::string, std::string>>> tables;
 
     for (auto &table : dataModels.items())
     {
@@ -36,7 +36,7 @@ void ORMGenerator::Migrate()
     {
         std::vector<std::string> foreignKeys;
         for (auto &field : tables[i].second)
-            if (field.second == "foreign_key")
+            if (field.second == "FOREIGN KEY")
                 foreignKeys.push_back(field.first.substr(0, field.first.find("_")));
         if (foreignKeys.size() == 0)
             graph.AddEdge(i, i);
@@ -51,6 +51,13 @@ void ORMGenerator::Migrate()
         }
     }
 
-    for (int vertex : mainTopologicalSort(graph))
+    std::deque<int> sortedGraph = mainTopologicalSort(graph);
+
+    while (!sortedGraph.empty())
+    {
+        int vertex = sortedGraph.back();
+        sortedGraph.pop_back();
+
         ORM::CreateTable(tables[vertex].first, tables[vertex].second);
+    }
 }

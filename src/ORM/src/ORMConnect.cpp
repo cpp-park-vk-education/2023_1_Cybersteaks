@@ -143,8 +143,6 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
     std::map<std::string, std::string> foreignKeys;
-    
-    std::cout << table << std::endl;
 
     connection->startTransaction();
     try
@@ -160,7 +158,7 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
                 std::string field = column.first.substr(column.first.find("_") + 1, column.first.size() - 1);
                 foreignKeys[column.first] = "    FOREIGN KEY (" + field + ") REFERENCES " + refTable + "(" + field + "),\n";
             }
-        SQLRequest += "PRIMARY KEY (id),\n";
+        SQLRequest += "    PRIMARY KEY (id),\n";
         if (foreignKeys.size() != 0)
         {
             for (auto &key : foreignKeys)
@@ -169,6 +167,7 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
         SQLRequest.pop_back();
         SQLRequest.pop_back();
         SQLRequest += "\n);";
+        std::cout << SQLRequest << std::endl;
         connection->sql(SQLRequest).execute();
         connection->commit();
         return true;
