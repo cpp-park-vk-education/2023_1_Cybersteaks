@@ -36,7 +36,6 @@ private:
     feedView* feedView_;
     userView* userView_;
     loginView* loginView_;
-    postView* postView_;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);

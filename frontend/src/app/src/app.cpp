@@ -16,7 +16,6 @@ void INcreaApplication::HideViews() {
     feedView_->hide();
     userView_->hide();
     loginView_->hide();
-    postView_->hide();
     std::cout << "END HIDE VIEWS" << std::endl;
 }
 
@@ -127,7 +126,6 @@ void INcreaApplication::CreateViews() {
     Wt::WApplication *app = Wt::WApplication::instance();
 
     feedView_ = body_->addWidget(std::make_unique<feedView>());
-    postView_  = body_->addWidget(std::make_unique<postView>());
     userView_ = body_->addWidget(std::make_unique<userView>(token.GetToken()));
     loginView_ = body_->addWidget(std::make_unique<loginView>());
     HideViews();
@@ -169,8 +167,7 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
     }
     else if (path == "/posts") {
         HideViews();
-        postView_->show();
-        postView_->ShowingFunction();
+        body_->addWidget(std::make_unique<Wt::WText>("posts"));
     }
 }
 

@@ -94,12 +94,6 @@ feedView::feedView()
     body_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());
     group_box_ = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
 
-    Wt::WContainerWidget* button = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
-    button->addWidget(std::make_unique<Wt::WText>("Go to posts"));
-    button->clicked().connect([=] (const Wt::WMouseEvent& e) {
-        internal_path_.emit("/posts");
-    });
-
     client_ = addChild(std::make_unique<Wt::Http::Client>());
     client_->done().connect(this, &feedView::HandleHttpResponse);
 

@@ -107,7 +107,7 @@ userView::userView(const std::string& token) {
     blog_->hide();
     portfolio_option_->addStyleClass("user_select");
 
-    postView* postView_ = blog_->addWidget(std::make_unique<postView>());
+    postView* postView_ = blog_->addWidget(std::make_unique<postView>(token));
     portfolio_->addWidget(std::make_unique<Wt::WText>("PORTFOLIO"));
 
     portfolio_option_->clicked().connect([=] (const Wt::WMouseEvent& e) {
@@ -132,7 +132,7 @@ userView::userView(const std::string& token) {
         if (blog_option_->hasStyleClass("user_non_select"))
             blog_option_->removeStyleClass("user_non_select"); 
         blog_->show();
-        postView_->ShowingFunction();
+        postView_->ShowingFunction(token_);
         portfolio_->hide();
     });
 

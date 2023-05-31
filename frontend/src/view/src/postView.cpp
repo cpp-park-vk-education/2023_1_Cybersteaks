@@ -1,12 +1,13 @@
 #include "postView.hpp"
 
-void postView::DoGetRequest(const std::string& url) {
+void postView::DoGetRequest(const std::string& url, const std::string& token) {
     std::cout << "=============GET REQUEST" << std::endl;
     Wt::Http::Message message;
     message.addHeader("Content-Type", "application/json");
     std::vector<Wt::Http::Message::Header> headers;
+    std::cout << "TOKEN: " << token_ << std::endl;
     headers.push_back(Wt::Http::Message::Header("Content-Type", "application/json"));
-    headers.push_back(Wt::Http::Message::Header("Authorization", "aGVsbG8="));
+    headers.push_back(Wt::Http::Message::Header("Authorization", token));
     if (client_->get(url, headers)) {
         //username = username_->valueText().toUTF8();
     }
@@ -24,7 +25,7 @@ void postView::RenderPosts() {
         Wt::WContainerWidget* post_text = post->addWidget(std::make_unique<Wt::WContainerWidget>());
         post_name->addWidget(std::make_unique<Wt::WText>("Новый пост"));
         post_text->addWidget(std::make_unique<Wt::WText>(std::string(posts_[i])));
-        post->setMargin(10);
+        post->addStyleClass("post");
         post_name->addStyleClass("post_name");
         post_text->addStyleClass("post_text");
     }
@@ -48,11 +49,13 @@ void postView::HandleHttpResponse(std::error_code err, const Wt::Http::Message& 
     }
 }
 
-void postView::ShowingFunction() {
-    DoGetRequest("http://127.0.0.1:1026/account/posts");
+void postView::ShowingFunction(const std::string& token) {
+    DoGetRequest("http://127.0.0.1:1026/account/posts", token);
 }
 
-postView::postView() {
+postView::postView(const std::string& new_token) {
+    std::cout << "NEW TOKEN: " << new_token << std::endl;
+    token_ = new_token;
     head_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());
     body_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());  
 
