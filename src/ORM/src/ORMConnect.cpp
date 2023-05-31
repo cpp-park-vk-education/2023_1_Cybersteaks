@@ -142,9 +142,9 @@ bool ORM::CreateTable(const std::string &table, const std::map<std::string, std:
 
     std::unique_ptr<mysqlx::Session> connection = ConnectionDB();
 
-    std::cout << table << std::endl;
-
     std::map<std::string, std::string> foreignKeys;
+    
+    std::cout << table << std::endl;
 
     connection->startTransaction();
     try

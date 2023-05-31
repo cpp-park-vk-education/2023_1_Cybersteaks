@@ -20,10 +20,15 @@ void ORMGenerator::Migrate()
     ORM::DropDatabase();
     ORM::CreateDatabase();
 
-    std::vector<std::pair<std::string, std::map<std::string, std::string>>> tables;
+    std::vector<std::pair<std::string, std::map< std::string, std::string>>> tables;
 
     for (auto &table : dataModels.items())
-        tables.push_back(std::pair(table.key(), table.value().get<std::map<std::string, std::string>>()));
+    {
+        std::map<std::string, std::string> model = table.value().get<std::map<std::string, std::string>>();
+        for (auto &field : model)
+            field.second = convertTypes.at(field.second);
+        tables.push_back(std::pair(table.key(), model));
+    }
 
     ListGraph graph(tables.size());
 
@@ -47,5 +52,5 @@ void ORMGenerator::Migrate()
     }
 
     for (int vertex : mainTopologicalSort(graph))
-        std::cout << vertex << std::endl;;
+        ORM::CreateTable(tables[vertex].first, tables[vertex].second);
 }
