@@ -1,0 +1,11 @@
+{
+    "Database": {
+        "Host": "localhost",
+        "Port": "33060",
+        "Username": "user",
+        "Password": "user",
+        "Name": "testDB"
+    },
+    "Models" : "models.json",
+    "Libs" : "./ORM/include/"
+}
