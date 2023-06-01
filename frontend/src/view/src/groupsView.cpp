@@ -20,6 +20,14 @@ void groupsView::RenderGroup(const Wt::Json::Value& group) {
     Wt::WContainerWidget* name = c_group->addWidget(std::make_unique<Wt::WContainerWidget>());
     name->addWidget(std::make_unique<Wt::WText>(std::string(group)));
     std::cout << std::string(group) << std::endl;
+    c_group->clicked().connect([=] (const Wt::WMouseEvent& e) {
+        group_box_->hide();
+        sub_group_posts->show();
+        g_name_box_->clear();
+        g_name_box_->addWidget(std::make_unique<Wt::WText>(std::string(group)));
+        g_name_box_->addStyleClass("subgroup_name");
+        post_list->ShowingFunction(std::string(group));
+    });
     c_group->addStyleClass("feed_group_unit");
     name->addStyleClass("feed_group_name");
 }
@@ -77,6 +85,8 @@ void groupsView::UpdateGroupName(const std::string& new_name) {
     name_box_->addWidget(std::make_unique<Wt::WText>(group_name_));
     name_box_->clicked().connect([=] (const Wt::WMouseEvent& e) {
         ShowingFunction();
+        group_box_->show();
+        sub_group_posts->hide();
     });
     name_box_->setMargin(15, Wt::Side::Bottom);
     name_box_->setMargin(15, Wt::Side::Top);
@@ -103,6 +113,10 @@ groupsView::groupsView(const std::string& group_name)
 
     body_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());
     group_box_ = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    sub_group_posts = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    g_name_box_ = sub_group_posts->addWidget(std::make_unique<Wt::WContainerWidget>());
+    post_list = sub_group_posts->addWidget(std::make_unique<groupPostsView>(""));
+    sub_group_posts->hide();
 
     client_ = addChild(std::make_unique<Wt::Http::Client>());
     client_->done().connect(this, &groupsView::HandleHttpResponse);

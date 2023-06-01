@@ -21,3 +21,7 @@ target_link_libraries(newPostView userView)
 
 add_library(groupsView src/groupsView.cpp)
 target_include_directories(groupsView PUBLIC include)
+
+add_library(groupPostsView src/groupPostsView.cpp)
+target_include_directories(groupPostsView PUBLIC include)
+target_link_libraries(groupsView groupPostsView)

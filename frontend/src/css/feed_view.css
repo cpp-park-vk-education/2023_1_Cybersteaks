@@ -118,3 +118,9 @@ body {
     transition-duration:  0.3s;
 }
 
+.subgroup_name {
+    text-align: center;
+    font-size: 1.1rem;
+    padding: 1rem;
+}
+

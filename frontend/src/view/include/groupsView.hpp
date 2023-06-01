@@ -17,6 +17,8 @@
 #include <Wt/Json/Value.h>
 #include <Wt/WSignal.h>
 
+#include "groupPostsView.hpp"
+
 class groupsView : public Wt::WContainerWidget {
 public:
     groupsView(const std::string& group_name);
@@ -29,6 +31,7 @@ private:
     Wt::WContainerWidget *body_;
     Wt::WContainerWidget *header_;
     Wt::WContainerWidget *name_box_;
+    Wt::WContainerWidget *g_name_box_;
     Wt::WContainerWidget *group_box_;
     Wt::WImage *user_icon_;
     Wt::Http::Client *client_;
@@ -36,6 +39,9 @@ private:
     Wt::WContainerWidget *groups_render_;
     Wt::Signal<std::string> internal_path_;
     std::string group_name_;
+    std::string sub_group_name_;
+    Wt::WContainerWidget* sub_group_posts;
+    groupPostsView* post_list;
     void RenderGroup(const Wt::Json::Value& group);
     void RenderGroups();
     void LoadingInitialSize();
