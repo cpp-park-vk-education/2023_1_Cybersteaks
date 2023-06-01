@@ -95,7 +95,7 @@ curl -X POST localhost:1026/account/groups -H "Content-Type: application/json" -
 
 printf '\n'
 
-curl -X GET localhost:1026/clusters -H "Content-Type: application/json"
+curl -X GET localhost:1026/clusters/ -H "Content-Type: application/json"
 # {"clusters":["Musicians","Artists","Programmers"],"status":"ok"}
 
 printf '\n'
