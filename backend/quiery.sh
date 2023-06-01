@@ -104,3 +104,31 @@ curl -X GET localhost:1026/clusters/groups -H "Content-Type: application/json"
 # {"cluster_groups":["NoPainNoGain","MusiciansClusterBastards","HardRockPayesOff"],"status":"ok"}
 
 printf '\n'
+
+curl -X GET localhost:1026/clusters/groups/ -H "Content-Type: application/json"
+# {"cluster_groups":[],"status":"ok"}
+
+printf '\n'
+
+curl -X GET localhost:1026/clusters/groups/?type=
+# {"cluster_groups":[],"status":"ok"}
+
+printf '\n'
+
+curl -X GET localhost:1026/clusters/groups/?type=musicians
+# {"cluster_groups":["NoPainNoGain","MusiciansClusterBastards","HardRockPayesOff"],"status":"ok"}
+
+printf '\n'
+
+curl -X GET localhost:1026/clusters/
+# {"clusters":["Musicians","Artists","Programmers"],"status":"ok"}
+
+printf '\n'
+
+curl -X GET localhost:1026/clusters/?type=artists
+# {"clusters":["Artists"],"status":"ok"}
+
+printf '\n'
+
+curl -X GET localhost:1026/clusters/?type=artists+programmers
+# {"clusters":["Artists","Programmers"],"status":"ok"}
