@@ -123,7 +123,8 @@ userView::userView(const std::string& token) {
     portfolio_option_->addStyleClass("user_select");
 
     postView* postView_ = blog_->addWidget(std::make_unique<postView>(token));
-    portfolio_->addWidget(std::make_unique<Wt::WText>("PORTFOLIO"));
+    Wt::WContainerWidget* img_box = portfolio_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    img_box->addWidget(std::make_unique<Wt::WImage>("src/images/static_image.jpg"));
 
     portfolio_option_->clicked().connect([=] (const Wt::WMouseEvent& e) {
         if (blog_option_->hasStyleClass("user_select"))
@@ -158,6 +159,7 @@ userView::userView(const std::string& token) {
     go_to_main->addStyleClass("user_main");
     logout_widget->addStyleClass("user_logout");
     functions->addStyleClass("user_functions");
+    img_box->addStyleClass("user_file");
 
     DoGetRequest("http://127.0.0.1:1026/account/settings");
 }
