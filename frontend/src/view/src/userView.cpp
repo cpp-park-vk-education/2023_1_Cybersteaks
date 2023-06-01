@@ -83,6 +83,16 @@ void userView::ShowingFunction() {
     DoGetRequest("http://127.0.0.1:1026/account/settings");
 }
 
+void userView::AddImage() {
+    Wt::WContainerWidget* img_box = portfolio_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    img_box->addWidget(std::make_unique<Wt::WImage>("src/images/static_image2.jpg"));
+    img_box->addStyleClass("user_file");
+}
+
+void userView::AddPost() {
+
+}
+
 userView::userView(const std::string& token) {
     token_ = token;
     head_ = this->addWidget(std::make_unique<Wt::WContainerWidget>());

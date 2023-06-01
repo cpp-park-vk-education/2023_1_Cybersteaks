@@ -31,6 +31,8 @@ public:
     void DoGetRequest(const std::string& url);
     void ShowingFunction();
     void UpdateToken(const std::string& new_token) { token_ = new_token; };
+    void AddImage();
+    void AddPost();
 private:
     User user;
     Wt::WContainerWidget* head_;

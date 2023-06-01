@@ -115,6 +115,10 @@
     height: 40vh;
 }
 
+.user_portfolio {
+    display: flex;
+}
+
 .user_portfolio .user_file img {
     height: 100%;
 }

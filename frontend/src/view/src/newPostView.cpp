@@ -63,6 +63,7 @@ newPostView::newPostView(const std::string& token) {
     p_button->addWidget(std::make_unique<Wt::WText>("Опубликовать"));
     p_button->clicked().connect([=] (const Wt::WMouseEvent& e) {
         go_to_userpage_.emit();
+        update_info_.emit("portfolio");
     });
 
     blog_form_ = body_->addWidget(std::make_unique<Wt::WContainerWidget>());
@@ -73,6 +74,7 @@ newPostView::newPostView(const std::string& token) {
     blog_button->addWidget(std::make_unique<Wt::WText>("Добавить пост"));
     blog_button->clicked().connect([=] (const Wt::WMouseEvent& e) {
         go_to_userpage_.emit();
+        update_info_.emit("blog");
     });
 
     client_ = addChild(std::make_unique<Wt::Http::Client>());

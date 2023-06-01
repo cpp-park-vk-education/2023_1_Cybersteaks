@@ -75,8 +75,12 @@ void INcreaApplication::CreateConnectForViews() {
     });
 
     newPostView_->go_to_userpage().connect(this, [=] () {
+        userView_->AddImage();
         app->setInternalPath("/userpage");
         HandlePathChange("/userpage");
+    });
+    newPostView_->update_info().connect(this, [=] (const std::string& action) {
+        //userView_->AddImage();
     });
 
     groupsView_->internal_path().connect(this, [=] (const std::string& url) {

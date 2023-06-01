@@ -25,6 +25,7 @@ class newPostView : public Wt::WContainerWidget {
 public:
     newPostView(const std::string& token);
     Wt::Signal<>& go_to_userpage() { return go_to_userpage_; };
+    Wt::Signal<std::string>& update_info() { return update_info_; };
     void DoGetRequest(const std::string& url);
     void ShowingFunction();
     void UpdateToken(const std::string& new_token) { token_ = new_token; };
@@ -43,6 +44,7 @@ private:
     std::string token_;
 
     Wt::Signal<> go_to_userpage_;
+    Wt::Signal<std::string> update_info_;
 
     void AddCssStyles();
     void UpdateUserInfo();
