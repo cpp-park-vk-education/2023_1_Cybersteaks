@@ -109,3 +109,12 @@
     padding: 1rem;
     margin-bottom: 1rem;
 }
+
+.user_portfolio .user_file {
+    margin-left: 1rem;
+    height: 40vh;
+}
+
+.user_portfolio .user_file img {
+    height: 100%;
+}
