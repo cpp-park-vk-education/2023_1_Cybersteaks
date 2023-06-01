@@ -17,6 +17,7 @@ void INcreaApplication::HideViews() {
     userView_->hide();
     loginView_->hide();
     newPostView_->hide();
+    groupsView_->hide();
     std::cout << "END HIDE VIEWS" << std::endl;
 }
 
@@ -29,6 +30,13 @@ void INcreaApplication::CreateConnectForViews() {
         //    next_url = "/login";
         app->setInternalPath(next_url);
         HandlePathChange(next_url);
+    });
+    feedView_->go_sub_groups().connect(this, [=] (const std::string& name) {
+        app->setInternalPath("/groups");
+        groupsView_->UpdateGroupName(name);
+        group_name_ = name;
+        groupsView_->ShowingFunction();
+        HandlePathChange("/groups");
     });
 
     userView_->update_user().connect(this, [=] (const Wt::Json::Object& new_user) {
@@ -70,6 +78,11 @@ void INcreaApplication::CreateConnectForViews() {
         app->setInternalPath("/userpage");
         HandlePathChange("/userpage");
     });
+
+    groupsView_->internal_path().connect(this, [=] (const std::string& url) {
+        app->setInternalPath(url);
+        HandlePathChange(url);
+    });
 }
 
 void INcreaApplication::CreateViews() {
@@ -79,6 +92,7 @@ void INcreaApplication::CreateViews() {
     userView_ = body_->addWidget(std::make_unique<userView>(token.GetToken()));
     loginView_ = body_->addWidget(std::make_unique<loginView>());
     newPostView_ = body_->addWidget(std::make_unique<newPostView>(token.GetToken()));
+    groupsView_ = body_->addWidget(std::make_unique<groupsView>(""));
     HideViews();
 
     std::cout << "VIEWS ARE CREATED" << std::endl;
@@ -115,6 +129,15 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
     }
     else if (path == "/registration") {
         body_->addWidget(std::make_unique<Wt::WText>("registraton"));
+    }
+    else if (path == "/groups") {
+        if (group_name_ != "") {
+            HideViews();
+            groupsView_->show();
+            groupsView_->UpdateGroupName(group_name_);
+            groupsView_->ShowingFunction();
+            groupsView_->ShowingFunction();
+        }
     }
     else if (path == "/new_post") {
         if (token.GetToken() == "") {

@@ -18,3 +18,6 @@ target_link_libraries(postView model)
 add_library(newPostView src/newPostView.cpp)
 target_include_directories(newPostView PUBLIC include)
 target_link_libraries(newPostView userView)
+
+add_library(groupsView src/groupsView.cpp)
+target_include_directories(groupsView PUBLIC include)

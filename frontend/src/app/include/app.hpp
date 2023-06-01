@@ -20,6 +20,7 @@
 #include "userView.hpp"
 #include "postView.hpp"
 #include "newPostView.hpp"
+#include "groupsView.hpp"
 #include "store.hpp"
 #include "model.hpp"
 
@@ -33,11 +34,13 @@ private:
     Wt::WContainerWidget *body_;
     Token token;
     Wt::Json::Object user_;
+    std::string group_name_;
     std::string username_;
     feedView* feedView_;
     userView* userView_;
     loginView* loginView_;
     newPostView* newPostView_;
+    groupsView* groupsView_;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);

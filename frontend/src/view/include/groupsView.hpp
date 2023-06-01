@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -8,34 +10,32 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
 #include <Wt/Http/Client.h>
+#include <Wt/Http/Message.h>
 #include <Wt/Json/Parser.h>
 #include <Wt/Json/Object.h>
 #include <Wt/Json/Array.h>
 #include <Wt/Json/Value.h>
 #include <Wt/WSignal.h>
 
-#include "model.hpp"
-
-class feedView : public Wt::WContainerWidget {
+class groupsView : public Wt::WContainerWidget {
 public:
-    feedView();
-    void GoToTheUserPage();
+    groupsView(const std::string& group_name);
     void ShowingFunction();
+    void GoToTheUserPage();
+    void UpdateGroupName(const std::string& new_name);
+    void DoGetRequest(const std::string& url);
     Wt::Signal<std::string>& internal_path() { return internal_path_; };
-    Wt::Signal<std::string>& go_sub_groups() { return go_sub_groups_; };
 private:
     Wt::WContainerWidget *body_;
     Wt::WContainerWidget *header_;
+    Wt::WContainerWidget *name_box_;
     Wt::WContainerWidget *group_box_;
     Wt::WImage *user_icon_;
-    Wt::WContainerWidget *search_box_;
-    Wt::WLineEdit *request_text_;
     Wt::Http::Client *client_;
     std::vector<Wt::Json::Value> groups_;
     Wt::WContainerWidget *groups_render_;
     Wt::Signal<std::string> internal_path_;
-    Wt::Signal<std::string> go_sub_groups_;
-    void DoGetRequest(const std::string& url);
+    std::string group_name_;
     void RenderGroup(const Wt::Json::Value& group);
     void RenderGroups();
     void LoadingInitialSize();

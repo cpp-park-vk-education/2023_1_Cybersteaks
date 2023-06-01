@@ -98,3 +98,23 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.groups_go_to_main {
+    margin: 0 auto;
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+    text-align: center;
+    background: rgba(255 ,255, 255, 0.2);
+    display: inline-block;
+    padding: 0.3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 1rem;
+    transition-duration:  0.3s;
+    user-select: none;
+}
+
+.groups_go_to_main:hover {
+    background: rgba(255 ,255, 255, 0.4);
+    transition-duration:  0.3s;
+}
+
