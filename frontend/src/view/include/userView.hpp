@@ -27,6 +27,7 @@ public:
     Wt::Signal<Wt::Json::Object>& update_user() { return update_user_; };
     Wt::Signal<>& go_to_main_page() { return go_to_main_page_; };
     Wt::Signal<>& logout() { return logout_; };
+    Wt::Signal<>& go_to_new_post() { return go_to_new_post_; };
     void DoGetRequest(const std::string& url);
     void ShowingFunction();
     void UpdateToken(const std::string& new_token) { token_ = new_token; };
@@ -47,6 +48,7 @@ private:
     Wt::Signal<Wt::Json::Object> update_user_;
     Wt::Signal<> go_to_main_page_;
     Wt::Signal<> logout_;
+    Wt::Signal<> go_to_new_post_;
 
     void AddCssStyles();
     void RenderUser();

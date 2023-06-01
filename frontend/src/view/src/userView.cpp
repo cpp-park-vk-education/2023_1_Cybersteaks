@@ -104,6 +104,9 @@ userView::userView(const std::string& token) {
     Wt::WContainerWidget* add_post = functions->addWidget(std::make_unique<Wt::WContainerWidget>());
     settings->addWidget(std::make_unique<Wt::WImage>("src/images/settings.svg"));
     add_post->addWidget(std::make_unique<Wt::WImage>("src/images/add.svg"));
+    add_post->clicked().connect([=] (const Wt::WMouseEvent& e) {
+        go_to_new_post_.emit();
+    }); 
 
     options_ = head_->addWidget(std::make_unique<Wt::WContainerWidget>());
 

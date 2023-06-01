@@ -35,6 +35,8 @@ private:
     Wt::WFileUpload* file_;
     Wt::WPushButton* upload_file_;
     Wt::WContainerWidget* blog_form_;
+    Wt::WTextArea* blog_text;
+    Wt::WContainerWidget* blog_button; 
 
     Wt::Json::Object user_;
     Wt::Http::Client *client_;
@@ -43,7 +45,6 @@ private:
     Wt::Signal<> go_to_userpage_;
 
     void AddCssStyles();
-    void RenderUser();
     void UpdateUserInfo();
     void HandleHttpResponse(std::error_code err, const Wt::Http::Message& response);
 };

@@ -19,6 +19,7 @@
 #include "loginView.hpp"
 #include "userView.hpp"
 #include "postView.hpp"
+#include "newPostView.hpp"
 #include "store.hpp"
 #include "model.hpp"
 
@@ -36,6 +37,7 @@ private:
     feedView* feedView_;
     userView* userView_;
     loginView* loginView_;
+    newPostView* newPostView_;
     void CreateStatic();
     void Clear();
     void HandlePathChange(const std::string& path);

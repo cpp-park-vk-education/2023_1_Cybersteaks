@@ -16,6 +16,7 @@ void INcreaApplication::HideViews() {
     feedView_->hide();
     userView_->hide();
     loginView_->hide();
+    newPostView_->hide();
     std::cout << "END HIDE VIEWS" << std::endl;
 }
 
@@ -44,6 +45,10 @@ void INcreaApplication::CreateConnectForViews() {
         app->setInternalPath("/login");
         HandlePathChange("/login");
     });
+    userView_->go_to_new_post().connect(this, [=] () {
+        app->setInternalPath("/new_post");
+        HandlePathChange("/new_post");
+    });
 
     loginView_->internal_path().connect(this, [=] (const std::string& new_token, const std::string& username, const std::string& error) {
         if (error == "") {
@@ -60,6 +65,11 @@ void INcreaApplication::CreateConnectForViews() {
         app->setInternalPath(url);
         HandlePathChange(url);
     });
+
+    newPostView_->go_to_userpage().connect(this, [=] () {
+        app->setInternalPath("/userpage");
+        HandlePathChange("/userpage");
+    });
 }
 
 void INcreaApplication::CreateViews() {
@@ -68,6 +78,7 @@ void INcreaApplication::CreateViews() {
     feedView_ = body_->addWidget(std::make_unique<feedView>());
     userView_ = body_->addWidget(std::make_unique<userView>(token.GetToken()));
     loginView_ = body_->addWidget(std::make_unique<loginView>());
+    newPostView_ = body_->addWidget(std::make_unique<newPostView>(token.GetToken()));
     HideViews();
 
     std::cout << "VIEWS ARE CREATED" << std::endl;
@@ -105,9 +116,15 @@ void INcreaApplication::HandlePathChange(const std::string& path) {
     else if (path == "/registration") {
         body_->addWidget(std::make_unique<Wt::WText>("registraton"));
     }
-    else if (path == "/posts") {
-        HideViews();
-        body_->addWidget(std::make_unique<Wt::WText>("posts"));
+    else if (path == "/new_post") {
+        if (token.GetToken() == "") {
+            HideViews();
+            loginView_->show();
+        }
+        else {
+            HideViews();
+            newPostView_->show();
+        }
     }
 }
 
@@ -118,6 +135,7 @@ INcreaApplication::INcreaApplication(const Wt::WEnvironment& env)
     useStyleSheet("src/css/feed_view.css");
     useStyleSheet("src/css/login_view.css");
     useStyleSheet("src/css/user_view.css");
+    useStyleSheet("src/css/new_post_view.css");
     head_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     body_ = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     Clear();

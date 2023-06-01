@@ -6,6 +6,7 @@ void feedView::LoadingInitialSize() {
 
 void feedView::DoGetRequest(const std::string& url) {
     std::cout << "=============GET REQUEST" << std::endl;
+    std::cout << url << std::endl;
     if (client_->get(url)) {
 
     }
@@ -64,7 +65,10 @@ void feedView::AddCssStyles() {
 }
 
 void feedView::ShowingFunction() {
-    DoGetRequest("http://127.0.0.1:1026/clusters");
+    std::string type = "";
+    if (request_text_->valueText().toUTF8() != "")
+        type = "/?type=" + request_text_->valueText().toUTF8();
+    DoGetRequest("http://127.0.0.1:1026/clusters" + type);
 }
 
 feedView::feedView()
@@ -79,13 +83,16 @@ feedView::feedView()
     Wt::WContainerWidget *text = header_->addWidget(std::make_unique<Wt::WContainerWidget>());
     Wt::WContainerWidget *type = header_->addWidget(std::make_unique<Wt::WContainerWidget>());
     text->addWidget(std::make_unique<Wt::WText>("Главная"));
-    type->addWidget(std::make_unique<Wt::WText>("Тема аккаунта"));
+    type->addWidget(std::make_unique<Wt::WText>("Поиск"));
     Wt::WContainerWidget *search = header_->addWidget(std::make_unique<Wt::WContainerWidget>());
 
     search_box_ = search->addWidget(std::make_unique<Wt::WContainerWidget>());
     search_box_->setId("search_icon");
     search_box_->clicked().connect([=] (const Wt::WMouseEvent& e) {
-        DoGetRequest("http://127.0.0.1:1026/clusters");
+        std::string type = "";
+        if (request_text_->valueText().toUTF8() != "")
+            type = "/?type=" + request_text_->valueText().toUTF8();
+        DoGetRequest("http://127.0.0.1:1026/clusters/" + type);
     });
     Wt::WImage *search_icon = search_box_->addWidget(std::make_unique<Wt::WImage>("src/images/search.svg"));
 
